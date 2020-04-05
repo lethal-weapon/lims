@@ -1,0 +1,43 @@
+html {
+  font-family:"Fira Sans", "Trebuchet MS", Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color:oldlace;
+}
+
+.welcome-section {
+  width:75%;
+  margin:3rem auto;
+  border-radius:10px;
+  background-color:rgba(190, 229, 235, .6);
+  font-family:cursive;
+  text-align:center;
+}
+
+#select-role {
+  padding-top:1rem;
+}
+
+.row .col-4 a {
+  color:black;
+}
+
+.row .col-4 img {
+  width:256px;
+  height:256px;
+}
+
+.main-footer {
+  font-size:.875rem;
+  margin:1rem auto;
+  padding:1rem;
+  color:#dbdbdb;
+  background-color:#202020;
+}
+
+.grid-container {
+  max-width:1220px;
+  margin:0 auto;
+  text-align:center;
+}
