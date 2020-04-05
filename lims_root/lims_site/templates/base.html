@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>
+    {% block title %} {% endblock title %}
+  </title>
+  <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'node_modules/bootstrap/dist/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'node_modules/font-awesome/css/font-awesome.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'node_modules/animate.css/animate.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'node_modules/hover.css/css/hover-min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
+  {% block link %} {% endblock link %}
+</head>
+<body>
+  {% block content %} {% endblock content %}
+  <footer class="main-footer">
+    <div class="grid-container">
+      All Content &amp; Design &copy; Laboratory Information Management System, 2019-2020.
+    </div>
+  </footer>
+  <script src="{% static 'node_modules/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'node_modules/jqueryui/jquery-ui.min.js' %}"></script>
+  <script src="{% static 'node_modules/popper.js/dist/umd/popper.min.js' %}"></script>
+  <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'node_modules/jquery.browser/dist/jquery.browser.min.js' %}"></script>
+  <script src="{% static 'node_modules/bootpag/lib/jquery.bootpag.min.js' %}"></script>
+  <script src="{% static 'node_modules/datatables/media/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'node_modules/ekko-lightbox/dist/ekko-lightbox.min.js' %}"></script>
+  <script src="{% static 'node_modules/salvattore/dist/salvattore.min.js' %}"></script>
+  {% block script %} {% endblock script %}
+</body>
+</html>
