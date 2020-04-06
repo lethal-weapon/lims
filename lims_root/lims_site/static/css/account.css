@@ -1,0 +1,17 @@
+.login-section {
+  width:75%;
+  margin:3rem auto;
+  border-radius:10px;
+  background-color:rgba(190, 229, 235, .6);
+  font-family:cursive;
+  text-align:center;
+}
+
+#login-container {
+  padding:2rem 0 2rem 0;
+}
+
+#login-form {
+  width:50%;
+  margin:0 auto;
+}

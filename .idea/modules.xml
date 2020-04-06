@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$USER_HOME$/git/CodingWithMitch-Blog-Course/.idea/CodingWithMitch-Blog-Course.iml" filepath="$USER_HOME$/git/CodingWithMitch-Blog-Course/.idea/CodingWithMitch-Blog-Course.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/lims.iml" filepath="$PROJECT_DIR$/.idea/lims.iml" />
       <module fileurl="file://$PROJECT_DIR$/lims_root/.idea/lims_root.iml" filepath="$PROJECT_DIR$/lims_root/.idea/lims_root.iml" />
       <module fileurl="file://$PROJECT_DIR$/../mfdw_project/.idea/mfdw_project.iml" filepath="$PROJECT_DIR$/../mfdw_project/.idea/mfdw_project.iml" />

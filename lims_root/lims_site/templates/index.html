@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-  Whoami
+  Who am i
 {% endblock title %}
 
 {% block link %}
@@ -17,13 +17,13 @@
     <div class="container" id="select-role">
       <div class="row">
         <div class="col-4 hvr-grow-shadow">
-          <a href="/register">
+          <a href="{% url 'register' %}">
             <img src="{% static 'images/newcomer.png' %}" class="img-thumbnail" alt="newcomer">
             <h4>Newcomer</h4>
           </a>
         </div>
         <div class="col-4 hvr-grow-shadow">
-          <a href="/login">
+          <a href="{% url 'login' %}">
             <img src="{% static 'images/s-and-t.png' %}" class="img-thumbnail" alt="teacher and student">
             <h4>Student/Teacher</h4>
           </a>
