@@ -29,7 +29,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # my apps
     'accounts.apps.AccountConfig',
+
+    # django package apps
+    'rest_framework',
+
+    # django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,10 +71,6 @@ TEMPLATES = [
         },
     },
 ]
-
-# Use customized auth model
-
-# AUTH_USER_MODEL = 'myauth.User'
 
 WSGI_APPLICATION = 'lims_site.wsgi.application'
 
@@ -112,6 +114,16 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+# User added configs
+
+# AUTH_USER_MODEL = 'User'
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

@@ -1,5 +1,9 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import logout
+from django.shortcuts import redirect, render
+
+
+def forgot_view(request):
+    return redirect('/')
 
 
 def logout_view(request):

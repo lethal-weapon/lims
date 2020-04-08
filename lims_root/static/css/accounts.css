@@ -1,4 +1,4 @@
-.login-section {
+.login-section, .register-section {
   width:75%;
   margin:3rem auto;
   border-radius:10px;
@@ -7,11 +7,15 @@
   text-align:center;
 }
 
-#login-container {
+#login-container, #register-container {
   padding:2rem 0 2rem 0;
 }
 
-#login-form {
+#login-form, #register-form {
   width:50%;
   margin:0 auto;
+}
+
+#login-form .form-group a, #register-form .form-group a {
+  color:cornflowerblue;
 }

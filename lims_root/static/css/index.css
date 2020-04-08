@@ -7,12 +7,16 @@
   text-align:center;
 }
 
-#select-role {
+#select-role-container {
   padding-top:1rem;
 }
 
 .row .col-4 a {
   color:black;
+}
+
+.row .col-4 a:hover {
+  text-decoration:none;
 }
 
 .row .col-4 img {
