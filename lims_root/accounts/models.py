@@ -31,6 +31,7 @@ class AccountManager(BaseUserManager):
         user = self.create_user(email, campus_id, password)
         user.is_staff = True
         user.is_admin = True
+        user.is_super = True
         user.is_verified = True
         user.save(using=self._db)
         return user
@@ -48,8 +49,8 @@ class Account(AbstractBaseUser):
 
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
+    is_super = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    is_delete = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'campus_id'

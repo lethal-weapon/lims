@@ -44,7 +44,7 @@ class UserChangeForm(forms.ModelForm):
         model = Account
         fields = ('email', 'campus_id', 'password',
                   'name', 'school', 'borrow_limit',
-                  'is_staff', 'is_admin', 'is_verified',)
+                  'is_verified', 'is_staff', 'is_admin',)
 
     # Regardless of what the user provides, return the initial value.
     # This is done here, rather than on the field, because the
@@ -58,8 +58,8 @@ class AccountAdmin(UserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('campus_id', 'school', 'name', 'is_verified',
-                    'is_staff', 'is_admin', 'email', 'last_login')
+    list_display = ('campus_id', 'school', 'name', 'email',
+                    'is_verified', 'is_staff', 'is_admin', 'is_super',)
     list_filter = ('school', 'is_verified', 'is_staff', 'is_admin',)
 
     search_fields = ('campus_id', 'name', 'email',)
@@ -77,9 +77,9 @@ class AccountAdmin(UserAdmin):
         ('Personal info', {
             'fields': ('name', 'school', 'email', 'borrow_limit',)
         }),
-        ('Permissions', {
-            'fields': ('is_staff', 'is_admin', 'is_active',
-                       'is_delete', 'is_verified')
+        ('Role status', {
+            'fields': ('is_staff', 'is_admin', 'is_super',
+                       'is_active', 'is_verified')
         }),
         ('Important dates', {
             'fields': ('last_login', 'date_joined',)
