@@ -22,17 +22,31 @@
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-user-circle-o"></i></span>
           </div>
-          <input type="email" id="email" name="email" title="Your Email"
-                 class="form-control" placeholder="Your email address" required autofocus>
+          <input type="text" id="campus-id" name="campus_id" title="Campus ID"
+                 class="form-control" placeholder="Your campus ID" required autofocus>
         </div>
 
         <div class="form-group input-group">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-key"></i></span>
           </div>
-          <input type="password" id="password" name="password" title="Your Password"
+          <input type="password" id="password" name="password" title="Password"
                  class="form-control" placeholder="Your password" required/>
         </div>
+
+        {% for field in login_form %}
+          <div>
+            {% for error in field.errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+        {% if login_form.non_field_errors %}
+          <div>
+            <p>{{ login_form.non_field_errors }}</p>
+          </div>
+        {% endif %}
 
         <div class="form-group">
           <button class="btn btn-lg btn-primary btn-block" type="submit">

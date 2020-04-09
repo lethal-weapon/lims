@@ -19,3 +19,7 @@
 #login-form .form-group a, #register-form .form-group a {
   color:cornflowerblue;
 }
+
+#login-form div p, #register-form div p {
+  color:red;
+}
