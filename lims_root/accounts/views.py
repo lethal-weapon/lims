@@ -50,7 +50,7 @@ def register_view(request):
                 password=form.cleaned_data.get('password1'))
 
             login(request, account)
-            return redirect(reverse_lazy('user-home'))
+            return redirect(reverse_lazy('register-success'))
 
     return render(request, 'accounts/register.html',
                   {'registration_form': form})

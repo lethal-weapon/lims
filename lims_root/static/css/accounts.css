@@ -1,4 +1,4 @@
-.login-section, .register-section {
+.login-section, .register-section, .register-success-section {
   width:75%;
   margin:3rem auto;
   border-radius:10px;
@@ -7,7 +7,7 @@
   text-align:center;
 }
 
-#login-container, #register-container {
+#login-container, #register-container, #register-success-container {
   padding:2rem 0 2rem 0;
 }
 

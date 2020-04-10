@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Register Successful
+{% endblock title %}
+
+{% block link %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/accounts.css' %}"/>
+{% endblock link %}
+
+{% block content %}
+  <div class="container-fluid register-success-section">
+    <div class="container" id="register-success-container">
+      <h1>You have successfully registered.</h1>
+      <h3>Automatically redirect to home page in</h3>
+      <h1 id="remain-seconds">3</h1>
+      <h3>Or click <a href="{% url 'login' %}" id="here">here</a></h3>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block script %}
+  <script>
+   $(function () {
+     // count down 3 sec and redirect to login page
+     // users will see the home page if they follow the
+     // procedure instead of typing url of this page directly
+     let $seconds = $('#remain-seconds').text().valueOf();
+     let $loginURL = $('#here').attr('href');
+
+     let countdown = setInterval(function() {
+       $('#remain-seconds').text((--$seconds).valueOf());
+       if ($seconds <= 0) {
+         clearInterval(countdown);
+         window.location.replace($loginURL);
+       }
+     }, 1000);
+   });
+  </script>
+{% endblock script %}
