@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from .forms import AccountAuthenticationForm
+from .forms import AccountAuthenticationForm, RegistrationForm
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -39,4 +39,18 @@ def logout_view(request):
 
 
 def register_view(request):
-    return render(request, 'accounts/register.html', {})
+    form = RegistrationForm()
+
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            account = authenticate(
+                campus_id=form.cleaned_data.get('campus_id'),
+                password=form.cleaned_data.get('password1'))
+
+            login(request, account)
+            return redirect(reverse_lazy('user-home'))
+
+    return render(request, 'accounts/register.html',
+                  {'registration_form': form})
