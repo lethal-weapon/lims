@@ -1,2 +1,107 @@
-<h1>You should able to see this page
-  only when you are authenticated</h1>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Home
+{% endblock title %}
+
+{% block link %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
+{% endblock link %}
+
+{% block content %}
+  <nav class="navbar navbar-expand-lg fixed-top navbar-home">
+    <a class="navbar-brand" href="{% url 'user-home' %}">
+      LIMS<span>&nbsp;<i class="fa fa-bullhorn"></i></span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navigation">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link hvr-underline-from-center" href="#"> Apply Apparatus</a></li>
+        <li class="nav-item"><a class="nav-link hvr-underline-from-center" href="#"> Apply Research</a></li>
+        <li class="nav-item"><a class="nav-link hvr-underline-from-center" href="#"> The Inventory</a></li>
+      </ul>
+      <ul class="navbar-nav pull-right">
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link" data-toggle="dropdown" role="button"
+             aria-haspopup="true" aria-expanded="false">
+            <span id="greeting">Hi,</span>
+            <span>
+              {% if user.name|length != 0 %}
+                {{ user.name }}
+              {% else %}
+                {{ user.campus_id }}
+              {% endif %}
+              &nbsp;
+              <i class="fa fa-user-circle"></i></span>
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-right">
+            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#profile-modal">
+              <i class="fa fa-user"></i> Profile</a>
+
+            <div class="dropdown-divider"></div>
+
+            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logout-modal">
+              <i class="fa fa-sign-out"></i> Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="modal" id="profile-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="profile-modal-title">Profile</h4>
+        </div>
+        <div class="modal-body">
+          Here is the profile content
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success btn-sm">
+            <i class="fa fa-check"></i> Save
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">
+            <i class="fa fa-times"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="logout-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Logout</h4>
+        </div>
+        <div class="modal-body">
+          <b>Are you sure to leave the system?</b>
+        </div>
+        <div class="modal-footer">
+          <form method="post" action="{% url 'logout' %}" id="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-sm">
+              <i class="fa fa-check"></i> Yep
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">
+              <i class="fa fa-times"></i> Nope
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid bulletin-section">
+    <div class="container">
+    </div>
+  </div>
+{% endblock content %}
+
+{% block script %}
+  <script src="{% static 'js/home.js' %}"></script>
+{% endblock script %}

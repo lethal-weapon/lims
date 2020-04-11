@@ -1,0 +1,49 @@
+.navbar-home {
+  background-color:rgba(0, 0, 0, .6);
+}
+
+.navbar-home .navbar-brand {
+  color:whitesmoke;
+  font-weight:bold;
+}
+
+.navbar-home .nav-item > .nav-link {
+  color:lightgray;
+}
+
+.navbar-home .nav-item > .nav-link:hover {
+  color:deepskyblue;
+}
+
+.navbar-home .mr-auto .nav-item > a.current {
+  color:deepskyblue;
+}
+
+
+.navbar-home .dropdown-menu {
+  background-color:black;
+  border-color:black;
+}
+
+.navbar-home .dropdown-menu > a {
+  color:lightgray;
+  background-color:black;
+}
+
+.navbar-home .dropdown-menu > a:hover {
+  color:deepskyblue;
+}
+
+.navbar-home #greeting {
+  color:lightgray;
+}
+
+#logout-modal {
+  background-color:black;
+}
+
+.bulletin-section {
+  width:75%;
+  margin:5rem auto;
+  border-radius:10px;
+}

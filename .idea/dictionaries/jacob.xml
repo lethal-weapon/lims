@@ -4,6 +4,8 @@
       <w>datatables</w>
       <w>endblock</w>
       <w>lims</w>
+      <w>navbar</w>
+      <w>toggler</w>
     </words>
   </dictionary>
 </component>
