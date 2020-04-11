@@ -14,7 +14,7 @@
     <div class="container" id="register-success-container">
       <h1>You have successfully registered.</h1>
       <h3>Automatically redirect to home page in</h3>
-      <h1 id="remain-seconds">3</h1>
+      <h1 id="remain-seconds">4</h1>
       <h3>Or click <a href="{% url 'login' %}" id="here">here</a></h3>
     </div>
   </div>
@@ -24,7 +24,7 @@
   <script>
    $(function () {
      // count down 3 sec and redirect to login page
-     // users will see the home page if they follow the
+     // users will see their home page if they follow the
      // procedure instead of typing url of this page directly
      let $seconds = $('#remain-seconds').text().valueOf();
      let $loginURL = $('#here').attr('href');

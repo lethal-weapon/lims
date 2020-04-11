@@ -4,10 +4,10 @@ from django.views.generic.base import TemplateView
 from . import views
 
 urlpatterns = [
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
-    path('forgot/', views.forgot_view, name='forgot-password'),
-    path('register/', views.register_view, name='register'),
+    path('login/', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),
+    path('forgot/', views.user_forgot, name='forgot-password'),
+    path('register/', views.user_register, name='register'),
     path('success/', TemplateView.as_view(
         template_name='accounts/register-success.html'),
          name='register-success'),

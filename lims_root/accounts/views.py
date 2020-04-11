@@ -11,11 +11,11 @@ def user_home(request):
     return render(request, 'accounts/home.html', {})
 
 
-def forgot_view(request):
+def user_forgot(request):
     return redirect('/')
 
 
-def login_view(request):
+def user_login(request):
     home_url = reverse_lazy('user-home')
     if request.user.is_authenticated:
         return redirect(home_url)
@@ -33,12 +33,12 @@ def login_view(request):
     return render(request, 'accounts/login.html', {'login_form': form})
 
 
-def logout_view(request):
+def user_logout(request):
     logout(request)
     return redirect('/')
 
 
-def register_view(request):
+def user_register(request):
     form = RegistrationForm()
 
     if request.method == 'POST':
