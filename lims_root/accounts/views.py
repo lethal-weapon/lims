@@ -3,12 +3,26 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from .forms import AccountAuthenticationForm, RegistrationForm
+from .forms import AccountAuthenticationForm, AccountUpdateForm, RegistrationForm
 
 
 @login_required(login_url=reverse_lazy('login'))
 def user_home(request):
-    return render(request, 'accounts/home.html', {})
+    if request.method == 'GET':
+        return render(request, 'accounts/home.html', {})
+
+    elif request.method == 'POST':
+        form = AccountUpdateForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.initial = {"email": request.POST['email']}
+            form.save()
+            message = 'Email Updated'
+        else:
+            message = 'This Email is Unavailable'
+
+        return render(request, 'accounts/home.html', {
+            'account_update_message': message})
 
 
 def user_forgot(request):

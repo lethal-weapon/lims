@@ -51,15 +51,63 @@
     </div>
   </nav>
 
+  {% if account_update_message %}
+    <div class="alert alert-info alert-position" data-alert-animate="bounceIn">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>{{ account_update_message }} <i class="fa fa-exclamation"></i></strong>
+    </div>
+  {% endif %}
+
   <div class="modal" id="profile-modal">
     <div class="modal-dialog">
       <div class="modal-content">
+        <form method="post" action="{% url 'user-home' %}" id="update-form">
+          {% csrf_token %}
         <div class="modal-header">
-          <h4 class="modal-title" id="profile-modal-title">Profile</h4>
+          <h4 class="modal-title" id="profile-modal-title">My Profile</h4>
         </div>
+
         <div class="modal-body">
-          Here is the profile content
+          <table class="modal-table">
+            <tr><td class="cell-title">Campus ID</td><td class="cell-value">{{ user.campus_id }}</td></tr>
+            <tr><td class="cell-title">Name</td><td class="cell-value">{{ user.name }}</td></tr>
+            <tr><td class="cell-title">School</td><td class="cell-value">{{ user.school }}</td></tr>
+            <tr><td class="cell-title">Borrow Limit</td><td class="cell-value">{{ user.borrow_limit }}</td></tr>
+            <tr><td class="cell-title">Role</td><td class="cell-value">
+              {% if user.role == 'STU' %}
+                <i class="fa fa-graduation-cap"></i>
+              {% elif user.role == 'TEA' %}
+                <i class="fa fa-black-tie"></i>
+              {% elif user.role == 'STA' or user.role == 'ADM' %}
+                <i class="fa fa-cogs"></i>
+              {% elif user.role == 'SUP' %}
+                <i class="fa fa-universal-access"></i>
+              {% else %}
+                <i class="fa fa-users"></i>
+              {% endif %}
+              <span>&nbsp;({{ user.role }})</span>
+            </td></tr>
+            <tr><td class="cell-title">Verified?</td><td class="cell-value">
+              {% if user.is_verified %}
+                <i class="fa fa-check-circle"></i>
+              {% else %}
+                <i class="fa fa-times-circle"></i>
+              {% endif %}
+            </td></tr>
+            <tr><td class="cell-title">Last Login</td><td class="cell-value">{{ user.last_login }}</td></tr>
+            <tr><td class="cell-title">Date Joined</td><td class="cell-value">{{ user.date_joined }}</td></tr>
+            <tr><td class="cell-title">Email</td><td class="cell-value">{{ user.email }}</td></tr>
+          </table>
+          <div class="dropdown-divider"></div>
+          <div class="form-group input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-at"></i></span>
+            </div>
+            <input type="email" id="email" name="email" title="Your New Email"
+                   class="form-control" placeholder="New email address" required>
+          </div>
         </div>
+
         <div class="modal-footer">
           <button type="submit" class="btn btn-success btn-sm">
             <i class="fa fa-check"></i> Save
@@ -68,6 +116,7 @@
             <i class="fa fa-times"></i> Cancel
           </button>
         </div>
+        </form>
       </div>
     </div>
   </div>
@@ -96,12 +145,11 @@
     </div>
   </div>
 
-  <div class="container-fluid bulletin-section">
-    <div class="container">
-    </div>
-  </div>
+  {% block main-content %} {% endblock main-content %}
+
 {% endblock content %}
 
 {% block script %}
   <script src="{% static 'js/home.js' %}"></script>
+  <script src="{% static 'js/alert.js' %}"></script>
 {% endblock script %}

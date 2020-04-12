@@ -52,7 +52,7 @@ class Account(AbstractBaseUser):
 
     name = models.CharField(max_length=50, unique=False, blank=True, null=True)
     school = models.CharField(max_length=4, choices=SCHOOL_CHOICES, blank=True, null=True)
-    borrow_limit = models.IntegerField(default=1)
+    borrow_limit = models.IntegerField(default=1, blank=True, null=True)
 
     role = models.CharField(max_length=3, choices=ROLE_CHOICES, default='VIS')
     is_active = models.BooleanField(default=True)
