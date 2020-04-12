@@ -9,6 +9,15 @@ SCHOOL_CHOICES = (
     ('AUTO', 'Automation'),
 )
 
+ROLE_CHOICES = (
+    ('VIS', 'Visitor'),
+    ('STU', 'Student'),
+    ('TEA', 'Teacher'),
+    ('STA', 'Staff'),
+    ('ADM', 'Administrator'),
+    ('SUP', 'Superuser'),
+)
+
 
 class AccountManager(BaseUserManager):
 
@@ -29,9 +38,7 @@ class AccountManager(BaseUserManager):
 
     def create_superuser(self, email, campus_id, password=None):
         user = self.create_user(email, campus_id, password)
-        user.is_staff = True
-        user.is_admin = True
-        user.is_super = True
+        user.role = 'SUP'
         user.is_verified = True
         user.save(using=self._db)
         return user
@@ -43,13 +50,11 @@ class Account(AbstractBaseUser):
     last_login = models.DateTimeField(auto_now=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
-    name = models.CharField(max_length=50, unique=False)
-    school = models.CharField(max_length=4, choices=SCHOOL_CHOICES)
-    borrow_limit = models.IntegerField(default=2)
+    name = models.CharField(max_length=50, unique=False, blank=True, null=True)
+    school = models.CharField(max_length=4, choices=SCHOOL_CHOICES, blank=True, null=True)
+    borrow_limit = models.IntegerField(default=1)
 
-    is_staff = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    is_super = models.BooleanField(default=False)
+    role = models.CharField(max_length=3, choices=ROLE_CHOICES, default='VIS')
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
 
@@ -63,8 +68,15 @@ class Account(AbstractBaseUser):
 
     # Does the user have a specific permission?
     def has_perm(self, perm, obj=None):
-        return self.is_admin
+        return self.role == 'ADM' or self.role == 'SUP'
 
     # Does the user have permissions to view the app "app_label"?
     def has_module_perms(self, app_label):
         return True
+
+    @property
+    def is_staff(self):
+        # Simplest possible answer: All admins are staff
+        return self.role == 'STA' or \
+               self.role == 'ADM' or \
+               self.role == 'SUP'

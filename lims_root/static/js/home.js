@@ -6,7 +6,7 @@
 $(function () {
   setClassForLinks();
 
-  // update the greeting according to current hour
+  // update the greeting according to current time
   let greeting;
   let hourNow = new Date().getHours();
   greeting = hourNow > 18 ? 'Good Evening' :
