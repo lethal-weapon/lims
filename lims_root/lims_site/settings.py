@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # my apps
     'accounts.apps.AccountConfig',
+    'bulletin.apps.BulletinConfig',
 
     # django package apps
     'rest_framework',

@@ -3,26 +3,28 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
+from bulletin.models import Article
 from .forms import AccountAuthenticationForm, AccountUpdateForm, RegistrationForm
 
 
 @login_required(login_url=reverse_lazy('login'))
 def user_home(request):
-    if request.method == 'GET':
-        return render(request, 'accounts/home.html', {})
+    context = {
+        # display top 7 latest articles
+        'article_list': Article.objects.order_by('-published')[:7]
+    }
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         form = AccountUpdateForm(request.POST, instance=request.user)
 
         if form.is_valid():
             form.initial = {"email": request.POST['email']}
             form.save()
-            message = 'Email Updated'
+            context['account_update_message'] = 'Email Updated'
         else:
-            message = 'This Email is Unavailable'
+            context['account_update_message'] = 'This Email is Unavailable'
 
-        return render(request, 'accounts/home.html', {
-            'account_update_message': message})
+    return render(request, 'bulletin/bulletin.html', context)
 
 
 def user_forgot(request):

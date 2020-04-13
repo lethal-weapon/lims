@@ -66,17 +66,21 @@ class Account(AbstractBaseUser):
     def __str__(self):
         return self.campus_id
 
-    # Does the user have a specific permission?
+    # Returns True if the user has the named permission.
+    # If obj is provided, the permission needs to be
+    # checked against a specific object instance.
     def has_perm(self, perm, obj=None):
         return self.role == 'ADM' or self.role == 'SUP'
 
-    # Does the user have permissions to view the app "app_label"?
+    # Returns True if the user has permission to
+    # access models in the given app.
     def has_module_perms(self, app_label):
         return True
 
+    # Returns True if the user is allowed
+    # to have access to the admin site.
     @property
     def is_staff(self):
-        # Simplest possible answer: All admins are staff
         return self.role == 'STA' or \
                self.role == 'ADM' or \
                self.role == 'SUP'
