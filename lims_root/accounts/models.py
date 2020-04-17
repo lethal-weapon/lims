@@ -7,6 +7,7 @@ SCHOOL_CHOICES = (
     ('OE', 'OptoElectronic Engineering'),
     ('SE', 'Big Data and Software Engineering'),
     ('AUTO', 'Automation'),
+    ('TBD', 'Unknown'),
 )
 
 ROLE_CHOICES = (
@@ -70,12 +71,18 @@ class Account(AbstractBaseUser):
     # If obj is provided, the permission needs to be
     # checked against a specific object instance.
     def has_perm(self, perm, obj=None):
-        return self.role == 'ADM' or self.role == 'SUP'
+        return self.is_staff
 
     # Returns True if the user has permission to
     # access models in the given app.
     def has_module_perms(self, app_label):
-        return True
+        if app_label == 'accounts':
+            return self.role == 'ADM' or self.role == 'SUP'
+
+        if app_label == 'bulletin':
+            return self.is_staff
+
+        return False
 
     # Returns True if the user is allowed
     # to have access to the admin site.

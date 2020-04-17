@@ -8,5 +8,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="lims_root" />
     <orderEntry type="module" module-name="CodingWithMitch-Blog-Course" />
+    <orderEntry type="module" module-name="py-code-repo" />
   </component>
 </module>

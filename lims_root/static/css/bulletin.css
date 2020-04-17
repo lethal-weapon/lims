@@ -1,9 +1,14 @@
-.article-section {
+.article-section, .schedule-section {
   width:75%;
   margin:5rem auto;
   border-radius:10px;
   background-color:lightblue;
   opacity:0.8;
+}
+
+.schedule-section {
+  margin-top:0;
+  margin-bottom:3rem;
 }
 
 .section-title, .section-end {
@@ -16,7 +21,8 @@
 }
 
 .section-title span {
-  font-size:75%;
+  font-size:60%;
+  color:yellow;
 }
 
 .section-title span a {
@@ -47,4 +53,25 @@
 #articles > div:hover {
   background-color:lightgoldenrodyellow;
   cursor:text;
+}
+
+#schedules {
+  padding:2rem 1rem 2rem 1rem;
+}
+
+#schedule-table {
+  background-color:whitesmoke;
+  border-radius:10px;
+}
+
+#schedule-table tr:hover {
+  background-color:#fff9e0;
+}
+
+#schedule-table th {
+  font-family:cursive;
+}
+
+#schedule-table td.cell-date {
+  font-family:monospace;
 }

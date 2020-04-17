@@ -1,19 +1,24 @@
+from datetime import datetime
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from bulletin.models import Article
+from bulletin.models import Article, FacilitySchedule
 from .forms import AccountAuthenticationForm, AccountUpdateForm, RegistrationForm
 
 
 @login_required(login_url=reverse_lazy('login'))
 def user_home(request):
     context = {
-        # display top 7 latest articles
-        'article_list': Article.objects.order_by('-published')[:7]
+        # display future schedules and top 7 latest articles
+        'article_list' : Article.objects.order_by('-published')[:7],
+        'schedule_list': FacilitySchedule.objects.filter(
+            day__gte=datetime.today().date())
     }
 
+    # update account info
     if request.method == 'POST':
         form = AccountUpdateForm(request.POST, instance=request.user)
 

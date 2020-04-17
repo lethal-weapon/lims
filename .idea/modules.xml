@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/lims.iml" filepath="$PROJECT_DIR$/.idea/lims.iml" />
       <module fileurl="file://$PROJECT_DIR$/lims_root/.idea/lims_root.iml" filepath="$PROJECT_DIR$/lims_root/.idea/lims_root.iml" />
       <module fileurl="file://$PROJECT_DIR$/../mfdw_project/.idea/mfdw_project.iml" filepath="$PROJECT_DIR$/../mfdw_project/.idea/mfdw_project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../py-code-repo/.idea/py-code-repo.iml" filepath="$PROJECT_DIR$/../py-code-repo/.idea/py-code-repo.iml" />
     </modules>
   </component>
 </project>

@@ -40,5 +40,12 @@
 {% endblock content %}
 
 {% block script %}
-  <script src="{% static 'js/index.js' %}"></script>
+  <script>
+    $(function () {
+      // fade in the three roles from left to right
+      $('div.col-4').hide().each(function (index) {
+        $(this).delay(300 * index).fadeIn();
+      });
+    });
+  </script>
 {% endblock script %}
