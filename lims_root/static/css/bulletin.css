@@ -6,9 +6,25 @@
   opacity:0.8;
 }
 
-.section-title {
+.section-title, .section-end {
   color:black;
   font-family:cursive;
+}
+
+.section-end {
+  text-align:center;
+}
+
+.section-title span {
+  font-size:75%;
+}
+
+.section-title span a {
+  color:white;
+}
+
+.section-title span a:hover {
+  color:red;
 }
 
 #articles {
