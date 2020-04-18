@@ -1,0 +1,35 @@
+.apparatus-section {
+  width:85%;
+  margin:5rem auto;
+  border-style:ridge;
+  border-radius:10px;
+}
+
+.section-title {
+  color:black;
+  font-family:cursive;
+}
+
+.section-invalid {
+  color:red;
+  text-align:center;
+}
+
+.table-wrapper {
+  padding:2rem 1rem 2rem 1rem;
+}
+
+.inventory-table {
+  background-color:whitesmoke;
+  border-style:groove;
+  border-width:thin;
+  border-radius:10px;
+}
+
+.inventory-table tr:hover {
+  background-color:lightskyblue;
+}
+
+.inventory-table th {
+  font-family:cursive;
+}

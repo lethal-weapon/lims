@@ -1,0 +1,62 @@
+{% extends "accounts/home.html" %}
+{% load static %}
+
+{% block title %}
+  Inventory
+{% endblock title %}
+
+{% block link %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/inventory.css' %}"/>
+{% endblock link %}
+
+{% block main-content %}
+  {% if user.is_verified %}
+  <div class="container-fluid apparatus-section">
+    <div class="container">
+      <h3 class="section-title">Apparatus</h3>
+    </div>
+    <div class="container table-wrapper">
+      <table class="table table-striped inventory-table">
+        <thead>
+          <tr>
+            <th>Equipment</th>
+            <th>Model No.</th>
+            <th>School</th>
+            <th>Cost</th>
+            <th>Purchased</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for apparatus in apparatus_list %}
+          <tr>
+            <td>{{ apparatus.name }}</td>
+            <td>{{ apparatus.model_no }}</td>
+            <td>{{ apparatus.school }}</td>
+            <td>${{ apparatus.cost }}</td>
+            <td>{{ apparatus.purchased|date:"Y-m-d" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="container-fluid apparatus-section">
+    <div class="container">
+      <h1 class="section-invalid">FORBIDDEN ACCESS</h1>
+    </div>
+  </div>
+  {% endif %}
+{% endblock main-content %}
+
+{% block script %}
+  <script src="{% static 'js/home.js' %}"></script>
+  <script src="{% static 'js/alert.js' %}"></script>
+  <script>
+    $(function () {
+      $('table.inventory-table').DataTable();
+    });
+  </script>
+{% endblock script %}

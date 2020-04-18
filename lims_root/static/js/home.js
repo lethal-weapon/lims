@@ -28,4 +28,13 @@ function setClassForLinks() {
     $(selector + '.current').removeClass('current');
     $(this).addClass('current');
   });
+
+  // set class for current one
+  let currentURL = window.location.href;
+  $(selector).each(function () {
+    let currentLink = $(this).attr('href');
+    if (currentURL.indexOf(currentLink) >= 0) {
+      $(this).addClass('current');
+    }
+  });
 }

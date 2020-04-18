@@ -20,7 +20,7 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link hvr-underline-from-center" href="#"> Apply Apparatus</a></li>
         <li class="nav-item"><a class="nav-link hvr-underline-from-center" href="#"> Apply Research</a></li>
-        <li class="nav-item"><a class="nav-link hvr-underline-from-center" href="#"> The Inventory</a></li>
+        <li class="nav-item"><a class="nav-link hvr-underline-from-center" href="{% url 'warehouse' %}"> The Inventory</a></li>
       </ul>
       <ul class="navbar-nav pull-right">
         <li class="nav-item dropdown">
@@ -49,7 +49,7 @@
   </nav>
 
   {% if account_update_message %}
-    <div class="alert alert-info alert-position" data-alert-animate="bounceIn">
+    <div class="alert alert-danger alert-position" data-alert-animate="bounceIn">
       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       <strong>{{ account_update_message }} <i class="fa fa-exclamation"></i></strong>
     </div>
