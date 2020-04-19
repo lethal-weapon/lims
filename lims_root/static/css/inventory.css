@@ -1,8 +1,10 @@
-.apparatus-section {
+.apparatus-section, .laboratory-section, .forbidden-section {
   width:85%;
   margin:5rem auto;
   border-style:ridge;
   border-radius:10px;
+  background-color:lightblue;
+  opacity:0.8;
 }
 
 .section-title {
@@ -10,7 +12,7 @@
   font-family:cursive;
 }
 
-.section-invalid {
+.section-invalid-title {
   color:red;
   text-align:center;
 }
@@ -26,10 +28,10 @@
   border-radius:10px;
 }
 
-.inventory-table tr:hover {
-  background-color:lightskyblue;
-}
-
 .inventory-table th {
   font-family:cursive;
+}
+
+.inventory-table tr:hover {
+  background-color:lightskyblue;
 }

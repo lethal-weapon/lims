@@ -20,7 +20,7 @@
       <table class="table table-striped inventory-table">
         <thead>
           <tr>
-            <th>Equipment</th>
+            <th>Name</th>
             <th>Model No.</th>
             <th>School</th>
             <th>Cost</th>
@@ -34,7 +34,7 @@
             <td>{{ apparatus.model_no }}</td>
             <td>{{ apparatus.school }}</td>
             <td>${{ apparatus.cost }}</td>
-            <td>{{ apparatus.purchased|date:"Y-m-d" }}</td>
+            <td>{{ apparatus.purchased|date:"Y-m" }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -42,10 +42,37 @@
     </div>
   </div>
 
-  {% else %}
-  <div class="container-fluid apparatus-section">
+  <div class="container-fluid laboratory-section">
     <div class="container">
-      <h1 class="section-invalid">FORBIDDEN ACCESS</h1>
+      <h3 class="section-title">Labs</h3>
+    </div>
+    <div class="container table-wrapper">
+      <table class="table table-striped inventory-table">
+        <thead>
+          <tr>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th>School</th>
+            <th>Label</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lab in laboratory_list %}
+          <tr>
+            <td>{{ lab.location }}</td>
+            <td>{{ lab.capacity }}</td>
+            <td>{{ lab.school }}</td>
+            <td>{{ lab.name }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="container-fluid forbidden-section">
+    <div class="container">
+      <h1 class="section-invalid-title">FORBIDDEN ACCESS</h1>
     </div>
   </div>
   {% endif %}
