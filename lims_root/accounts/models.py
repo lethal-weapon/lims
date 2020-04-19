@@ -79,7 +79,9 @@ class Account(AbstractBaseUser):
         if app_label == 'accounts':
             return self.role == 'ADM' or self.role == 'SUP'
 
-        if app_label == 'bulletin' or app_label == 'inventory':
+        if app_label == 'bulletin' or \
+            app_label == 'inventory' or \
+            app_label == 'applications':
             return self.is_staff
 
         return False

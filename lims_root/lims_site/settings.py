@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountConfig',
     'bulletin.apps.BulletinConfig',
     'inventory.apps.InventoryConfig',
+    'applications.apps.ApplicationsConfig',
 
     # django package apps
     'rest_framework',
