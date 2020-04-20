@@ -71,14 +71,14 @@ class AccountAdmin(UserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     fieldsets = (
-        (None, {
+        ('Basics', {
             'fields': ('campus_id', 'password',)
         }),
         ('Personal info', {
             'fields': ('name', 'school', 'email', 'borrow_limit',)
         }),
         ('Role status', {
-            'fields': ('role', 'is_active', 'is_verified')
+            'fields': ('role', 'is_active', 'is_verified',)
         }),
         ('Important dates', {
             'fields': ('last_login', 'date_joined',)
@@ -88,7 +88,7 @@ class AccountAdmin(UserAdmin):
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
-        (None, {
+        ('Basics', {
             'classes': ('wide',),
             'fields' : ('campus_id', 'email', 'password1', 'password2'),
         }),
