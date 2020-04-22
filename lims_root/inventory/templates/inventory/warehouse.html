@@ -21,7 +21,7 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th>Model No.</th>
+            <th>Model #</th>
             <th>School</th>
             <th>Cost</th>
             <th>Purchased</th>
@@ -34,7 +34,7 @@
             <td>{{ apparatus.model_no }}</td>
             <td>{{ apparatus.school }}</td>
             <td>${{ apparatus.cost }}</td>
-            <td>{{ apparatus.purchased|date:"Y-m" }}</td>
+            <td>{{ apparatus.purchased|date:"Y/m" }}</td>
           </tr>
           {% endfor %}
         </tbody>

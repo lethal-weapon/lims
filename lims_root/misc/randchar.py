@@ -1,3 +1,4 @@
+from datetime import datetime
 from random import randint
 
 
@@ -17,8 +18,11 @@ def getRandomUpperCaseLetter():
 
 
 # Generate a random digit character
-def getRandomDigitCharacter():
-    return getRandomCharacter('0', '9')
+def getRandomDigitCharacter(length=1):
+    string = ""
+    for i in range(length):
+        string += getRandomCharacter('0', '9')
+    return string
 
 
 def getRandomPositiveDigit():
@@ -87,7 +91,26 @@ def random_cost(MIN=5, MAX=555):
     return str(randint(MIN, MAX) + (randint(0, 9) * 10 / 100)) + "0"
 
 
-def random_date():
-    return str(randint(2000, 2020)) + '-' \
-           + str(randint(1, 12)) + '-' \
-           + str(randint(1, 28))
+def random_date(year_start=2000, year_end=2020):
+    return datetime.today().date().replace(
+        year=randint(year_start, year_end),
+        month=randint(1, 12),
+        day=randint(1, 28))
+
+
+def random_time(hour_start=0, hour_end=23):
+    return datetime.today().time().replace(
+        hour=randint(hour_start, hour_end),
+        minute=randint(0, 59),
+        second=randint(0, 59))
+
+
+def random_datetime(year_start=2000, year_end=2020,
+                    hour_start=0, hour_end=23):
+    return datetime.today().replace(
+        year=randint(year_start, year_end),
+        month=randint(1, 12),
+        day=randint(1, 28),
+        hour=randint(hour_start, hour_end),
+        minute=randint(0, 59),
+        second=randint(0, 59))

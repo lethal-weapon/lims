@@ -6,14 +6,14 @@ from .models import Article, FacilitySchedule
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ('published', 'subject', 'content',)
     readonly_fields = ('published',)
-    ordering = ('published',)
+    ordering = ('-published',)
     search_fields = ('subject', 'content',)
 
 
 class FacilityScheduleAdmin(admin.ModelAdmin):
     list_display = ('day', 'school', 'site', 'start', 'end',)
     list_filter = ('school',)
-    ordering = ('day',)
+    ordering = ('-day',)
     search_fields = ('site', )
 
 

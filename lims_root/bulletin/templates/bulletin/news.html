@@ -13,20 +13,24 @@
 {% block main-content %}
   <div class="container-fluid article-section">
     <div class="container">
-      <h3 class="section-title">Latest News</h3>
+      <h3 class="section-title">Site News
+        <a href="{% url 'user-home' %}" title="Back to Latest">
+          <i class="fa fa-lg fa-arrow-circle-o-left pull-right"></i>
+        </a>
+      </h3>
     </div>
     <div class="container" id="articles">
       {% for article in article_list %}
         <h4>
           <i class="fa fa-arrow-down"></i>
-          <small>{{ article.published|date:"D, F d Y, P" }}</small> -
+          <small>{{ article.published|date:"D, M dS Y, ha" }}</small>
           <em>{{ article.subject|capfirst }}</em>
         </h4>
         <div>{{ article.content }}</div>
       {% endfor %}
     </div>
     <div class="container">
-      <h3 class="section-end">THE END</h3>
+      <h3 class="section-end">&lt;THE END&gt;</h3>
     </div>
   </div>
 {% endblock main-content %}

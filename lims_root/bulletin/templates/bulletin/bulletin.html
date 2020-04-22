@@ -21,7 +21,7 @@
       {% for article in article_list %}
         <h4>
           <i class="fa fa-arrow-down"></i>
-          <small>{{ article.published|date:"D, F d Y, P" }}</small> -
+          <small>{{ article.published|date:"D, M dS Y, ha" }}</small>
           <em>{{ article.subject|capfirst }}</em>
         </h4>
         <div>{{ article.content }}</div>
@@ -32,7 +32,7 @@
   <div class="container-fluid schedule-section">
     <div class="container">
       <h3 class="section-title">Facility Schedules
-        <span>Now: {% now "D, F d Y, P" %}</span>
+        <span>Now: {% now "l, Y/m/d, h:ia" %}</span>
       </h3>
     </div>
     <div class="container" id="schedules">
@@ -49,11 +49,11 @@
         <tbody>
           {% for schedule in schedule_list %}
           <tr>
-            <td class="cell-date">{{ schedule.day|date:"D, F d Y" }}</td>
+            <td class="cell-date">{{ schedule.day|date:"Y/m/d, D" }}</td>
             <td>{{ schedule.school }}</td>
             <td>{{ schedule.site }}</td>
-            <td>{{ schedule.start }}</td>
-            <td>{{ schedule.end }}</td>
+            <td class="cell-time">{{ schedule.start|date:"h:ia" }}</td>
+            <td class="cell-time">{{ schedule.end|date:"h:ia" }}</td>
           </tr>
           {% endfor %}
         </tbody>

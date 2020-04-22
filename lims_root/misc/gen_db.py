@@ -1,9 +1,14 @@
 from random import randint
 
-from misc.randchar import random_cost, random_date, random_location, random_model_no
+from misc.randchar import \
+    random_cost, random_date, random_datetime, \
+    random_location, random_model_no, random_time
 
 IN_FILE = 'hardware.txt'
 OUT_FILE = 'db.py'
+TABLES = ('inventory_facility', 'inventory_apparatus',
+          'inventory_laboratory', 'bulletin_article',
+          'bulletin_facilityschedule',)
 STAFF_IDS = (2, 3,)
 LAB_NAMES = ('AI', 'VR', 'AR', 'Computer Vision',
              'Advanced DIP', 'IoT', '5G/6G', 'Margin Computing',
@@ -36,12 +41,10 @@ def finish():
 
 
 def delete():
-    outfile.write("cursor.execute(\""
-                  "delete from inventory_facility;\")\n")
-    outfile.write("cursor.execute(\""
-                  "delete from inventory_apparatus;\")\n")
-    outfile.write("cursor.execute(\""
-                  "delete from inventory_laboratory;\")\n")
+    for table in TABLES:
+        outfile.write("cursor.execute(\""
+                      "delete from " + table + ";\")\n")
+
     outfile.write("\n\n")
 
 
@@ -115,12 +118,57 @@ def gen_labs(nlab=60):
     outfile.write("\n\n")
 
 
+def gen_article(aid, published, subject, content):
+    outfile.write("cursor.execute(\""
+                  "insert into bulletin_article "
+                  "(id, published, subject, content) values ("
+                  + str(aid) + ", '" + str(published) + "', '"
+                  + str(subject) + "', '" + str(content)
+                  + "');\")\n")
+
+
+def gen_articles(narticle=25):
+    for i in range(1, narticle + 1):
+        gen_article(i, random_datetime(2010, 2020),
+                    "Here is the subject for news #" + str(i),
+                    "Here is the corresponding content for news #" + str(i) +
+                    "  " +
+                    "Roses are red, " +
+                    "violets are blue. " +
+                    "A face like yours, " +
+                    "belongs to the zoo. ")
+    outfile.write("\n\n")
+
+
+def gen_schedule(sid, school, site, day, start, end):
+    outfile.write("cursor.execute(\""
+                  "insert into bulletin_facilityschedule "
+                  "(id, school, site, day, start, end) values ("
+                  + str(sid) + ", '" + str(school) + "', '"
+                  + str(site) + "', '" + str(day) + "', '"
+                  + str(start) + "', '" + str(end)
+                  + "');\")\n")
+
+
+def gen_schedules(nschedule=50):
+    for i in range(1, nschedule + 1):
+        gen_schedule(i,
+                     SCHOOL_CHOICES[randint(0, len(SCHOOL_CHOICES) - 1)][0],
+                     random_location(),
+                     random_date(2020, 2021),
+                     random_time(8, 12),
+                     random_time(14, 18))
+    outfile.write("\n\n")
+
+
 def main():
     prepare()
     delete()
 
     gen_apparatuses()
     gen_labs()
+    gen_articles()
+    gen_schedules()
 
     finish()
 

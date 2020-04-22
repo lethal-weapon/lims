@@ -20,6 +20,15 @@
   text-align:center;
 }
 
+.section-title a i {
+  padding-top:1rem;
+  color:black;
+}
+
+.section-title a i:hover {
+  color:white;
+}
+
 .section-title span {
   font-size:60%;
   color:yellow;
@@ -43,6 +52,10 @@
   border-radius:5px;
   padding:5px;
   margin:5px;
+}
+
+#articles > h4 small {
+  font-family:monospace;
 }
 
 #articles > h4:hover {
@@ -72,6 +85,6 @@
   font-family:cursive;
 }
 
-#schedule-table td.cell-date {
+#schedule-table td.cell-date, #schedule-table td.cell-time {
   font-family:monospace;
 }
