@@ -1,6 +1,6 @@
 from random import randint
 
-from misc.randchar import \
+from misc.random_src import \
     random_cost, random_date, random_datetime, \
     random_location, random_model_no, random_time
 

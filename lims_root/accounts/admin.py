@@ -43,7 +43,7 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ('email', 'campus_id', 'password',
-                  'name', 'school', 'borrow_limit',
+                  'name', 'school', 'limit',
                   'role', 'is_active', 'is_verified',)
 
     # Regardless of what the user provides, return the initial value.
@@ -75,7 +75,7 @@ class AccountAdmin(UserAdmin):
             'fields': ('campus_id', 'password',)
         }),
         ('Personal info', {
-            'fields': ('name', 'school', 'email', 'borrow_limit',)
+            'fields': ('name', 'school', 'email', 'limit',)
         }),
         ('Role status', {
             'fields': ('role', 'is_active', 'is_verified',)

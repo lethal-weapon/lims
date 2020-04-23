@@ -4,15 +4,15 @@ from .models import FacilityApplication, ResearchApplication
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('submitted', 'start', 'end', 'status', 'applicant',)
+    list_display = ('applied_at', 'start', 'end', 'status', 'applicant',)
     list_filter = ('status',)
-    ordering = ('submitted', 'start',)
+    ordering = ('applied_at', 'start',)
     search_fields = ('applicant',)
-    readonly_fields = ('submitted',)
+    readonly_fields = ('applied_at', 'created_at',)
 
     fieldsets = (
         ('Basics', {
-            'fields': ('submitted', 'start', 'end', 'status',)
+            'fields': ('applied_at', 'start', 'end', 'status',)
         }),
         ('Details', {
             'fields': ('reason', 'reply',)
@@ -24,10 +24,10 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 
 class ResearchApplicationAdmin(ApplicationAdmin):
-    search_fields = ('applicant', 'title', 'members',)
+    search_fields = ('title', 'applicant', 'members',)
     fieldsets = (
         ('Basics', {
-            'fields': ('submitted', 'start', 'end', 'status',)
+            'fields': ('applied_at', 'start', 'end', 'status',)
         }),
         ('Details', {
             'fields': ('reason', 'reply',)

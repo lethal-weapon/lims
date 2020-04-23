@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
+
 SCHOOL_CHOICES = (
     ('CS', 'Computer Science'),
     ('CE', 'Communication Engineering'),
@@ -53,7 +54,7 @@ class Account(AbstractBaseUser):
 
     name = models.CharField(max_length=50, unique=False, blank=True, null=True)
     school = models.CharField(max_length=4, choices=SCHOOL_CHOICES, blank=True, null=True)
-    borrow_limit = models.IntegerField(default=1, blank=True, null=True)
+    limit = models.IntegerField(default=1, verbose_name='Facility Borrow Limit')
 
     role = models.CharField(max_length=3, choices=ROLE_CHOICES, default='VIS')
     is_active = models.BooleanField(default=True)

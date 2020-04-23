@@ -4,6 +4,7 @@ from accounts.models import Account
 from inventory.models import Facility
 
 STATUS_CHOICES = (
+    ('PEN', 'PENDING'),
     ('APP', 'APPLIED'),
     ('WAI', 'WAITING'),
     ('ONG', 'ONGOING'),
@@ -16,11 +17,12 @@ STATUS_CHOICES = (
 class Application(models.Model):
     start = models.DateField(verbose_name='Start Date')
     end = models.DateField(verbose_name='End Date')
-    submitted = models.DateTimeField(verbose_name='Apply Time', auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    applied_at = models.DateTimeField(verbose_name='Apply Time')
 
-    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='APP')
+    status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='PEN')
     reason = models.TextField(verbose_name='Apply Reason')
-    reply = models.CharField(verbose_name='Staff Short Reply', max_length=100, blank=True, null=True)
+    reply = models.TextField(verbose_name='Staff Reply', blank=True, null=True)
 
     applicant = models.ForeignKey(Account, on_delete=models.CASCADE)
 
@@ -29,7 +31,11 @@ class Application(models.Model):
 
 
 class FacilityApplication(Application):
-    items = models.ManyToManyField(Facility, verbose_name='Applied Facilities')
+    alias = models.CharField(max_length=50, default='My Application')
+    items = models.ManyToManyField(Facility, verbose_name='Facilities Applied')
+
+    def __str__(self):
+        return self.alias
 
 
 class ResearchApplication(Application):
