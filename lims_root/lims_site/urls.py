@@ -22,5 +22,6 @@ urlpatterns = [
     path('account/', include('accounts.urls')),
     path('bulletin/', include('bulletin.urls')),
     path('inventory/', include('inventory.urls')),
+    path('application/', include('applications.urls')),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
 ]

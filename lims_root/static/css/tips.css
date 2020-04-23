@@ -1,0 +1,16 @@
+.tips-section {
+  width:75%;
+  margin:5rem auto;
+  border-radius:15px;
+  background-color:lightblue;
+  opacity:0.8;
+}
+
+.section-title, .section-end {
+  color:black;
+  font-family:cursive;
+}
+
+#tips-wrapper {
+  padding:2rem 1rem 2rem 1rem;
+}

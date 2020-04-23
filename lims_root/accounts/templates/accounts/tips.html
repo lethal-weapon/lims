@@ -1,0 +1,36 @@
+{% extends "accounts/home.html" %}
+{% load static %}
+
+{% block title %}
+  Tips
+{% endblock title %}
+
+{% block link %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/tips.css' %}"/>
+{% endblock link %}
+
+{% block main-content %}
+  <div class="container-fluid tips-section">
+    <div class="container">
+      <h3 class="section-title">Tips for Newcomers</h3>
+    </div>
+    <div class="container" id="tips-wrapper">
+      {% if user.is_verified %}
+        <h4 class="tips">Tips go here</h4>
+
+      {% else %}
+        <h1 class="section-end">GET VERIFIED FOR TIPS</h1>
+      {% endif %}
+    </div>
+  </div>
+{% endblock main-content %}
+
+{% block script %}
+  <script src="{% static 'js/home.js' %}"></script>
+  <script src="{% static 'js/alert.js' %}"></script>
+  <script>
+    $(function () {
+    });
+  </script>
+{% endblock script %}
