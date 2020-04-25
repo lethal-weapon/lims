@@ -5,10 +5,9 @@
   Tips
 {% endblock title %}
 
-{% block link %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
+{% block exrea-style %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/tips.css' %}"/>
-{% endblock link %}
+{% endblock exrea-style %}
 
 {% block main-content %}
   <div class="container-fluid tips-section">
@@ -26,11 +25,9 @@
   </div>
 {% endblock main-content %}
 
-{% block script %}
-  <script src="{% static 'js/home.js' %}"></script>
-  <script src="{% static 'js/alert.js' %}"></script>
+{% block extra-script %}
   <script>
     $(function () {
     });
   </script>
-{% endblock script %}
+{% endblock extra-script %}

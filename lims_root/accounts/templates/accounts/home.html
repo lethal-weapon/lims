@@ -7,6 +7,7 @@
 
 {% block link %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
+  {% block exrea-style %} {% endblock exrea-style %}
 {% endblock link %}
 
 {% block content %}
@@ -149,4 +150,5 @@
 {% block script %}
   <script src="{% static 'js/home.js' %}"></script>
   <script src="{% static 'js/alert.js' %}"></script>
+  {% block extra-script %} {% endblock extra-script %}
 {% endblock script %}

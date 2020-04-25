@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block title %}
-  Apply Base
+  Application Base
 {% endblock title %}
 
-{% block link %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/apply-base.css' %}"/>
-{% endblock link %}
+{% block exrea-style %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/applications-base.css' %}"/>
+  {% block extra-applications-style %} {% endblock extra-applications-style %}
+{% endblock exrea-style %}
 
 {% block main-content %}
   <div class="container-fluid" id="apply-base-section">
@@ -31,8 +31,7 @@
   </div>
 {% endblock main-content %}
 
-{% block script %}
-  <script src="{% static 'js/home.js' %}"></script>
-  <script src="{% static 'js/alert.js' %}"></script>
-  <script src="{% static 'js/apply-base.js' %}"></script>
-{% endblock script %}
+{% block extra-script %}
+  <script src="{% static 'js/applications-base.js' %}"></script>
+  {% block extra-applications-script %} {% endblock extra-applications-script %}
+{% endblock extra-script %}

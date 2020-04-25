@@ -5,10 +5,9 @@
   News Center
 {% endblock title %}
 
-{% block link %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
+{% block exrea-style %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/bulletin.css' %}"/>
-{% endblock link %}
+{% endblock exrea-style %}
 
 {% block main-content %}
   <div class="container-fluid article-section">
@@ -35,12 +34,10 @@
   </div>
 {% endblock main-content %}
 
-{% block script %}
-  <script src="{% static 'js/home.js' %}"></script>
-  <script src="{% static 'js/alert.js' %}"></script>
+{% block extra-script %}
   <script>
     $(function () {
       $('#articles').accordion();
     });
   </script>
-{% endblock script %}
+{% endblock extra-script %}
