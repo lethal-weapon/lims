@@ -1,0 +1,38 @@
+{% extends "accounts/home.html" %}
+{% load static %}
+
+{% block title %}
+  Apply Base
+{% endblock title %}
+
+{% block link %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/apply-base.css' %}"/>
+{% endblock link %}
+
+{% block main-content %}
+  <div class="container-fluid" id="apply-base-section">
+    <div class="container" id="apply-base-wrapper">
+      <aside class="sidebar">
+        <nav>
+          <ul>
+            <li><i class="fa fa-hand-o-right"></i><a class="hvr-grow-shadow" href="{% url 'my-list' %}">My List</a></li>
+            <li><i class="fa fa-hand-o-right"></i><a class="hvr-grow-shadow" href="{% url 'apply-facility' %}">Apply Facility</a></li>
+            <li><i class="fa fa-hand-o-right"></i><a class="hvr-grow-shadow" href="{% url 'apply-research' %}">Apply Research</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <section id="apply-base-content">
+        {% block application-content %}
+        {% endblock application-content %}
+      </section>
+    </div>
+  </div>
+{% endblock main-content %}
+
+{% block script %}
+  <script src="{% static 'js/home.js' %}"></script>
+  <script src="{% static 'js/alert.js' %}"></script>
+  <script src="{% static 'js/apply-base.js' %}"></script>
+{% endblock script %}
