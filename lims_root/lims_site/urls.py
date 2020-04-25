@@ -23,5 +23,8 @@ urlpatterns = [
     path('bulletin/', include('bulletin.urls')),
     path('inventory/', include('inventory.urls')),
     path('application/', include('applications.urls')),
+
+    path('tips/', TemplateView.as_view(template_name='tips.html'), name='site-tips'),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
+
 ]

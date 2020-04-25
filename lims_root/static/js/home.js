@@ -8,7 +8,7 @@ $(function () {
   setClassForLinks();
 });
 
-// update the greeting according to current time
+// Update the greeting according to current time
 function updateGreeting() {
   let greeting;
   let hourNow = new Date().getHours();
@@ -20,7 +20,7 @@ function updateGreeting() {
   $('#greeting').text(greeting);
 }
 
-// remove/add the 'current' class from/to
+// Remove/add the 'current' class from/to
 // the navigation links when they are clicked
 function setClassForLinks() {
   let selector = '.navbar-home .mr-auto .nav-item > a';
@@ -32,8 +32,10 @@ function setClassForLinks() {
   // set class for current one
   let currentURL = window.location.href;
   $(selector).each(function () {
-    let currentLink = $(this).attr('href');
-    if (currentURL.indexOf(currentLink) >= 0) {
+    let currentLink = $(this).attr('href').toString();
+    let linkPrefix = currentLink.split("/")[1];
+
+    if (currentURL.indexOf(linkPrefix) >= 0) {
       $(this).addClass('current');
     }
   });

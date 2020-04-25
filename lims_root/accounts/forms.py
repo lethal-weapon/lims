@@ -38,7 +38,7 @@ class AccountUpdateForm(forms.ModelForm):
         try:
             account = Account.objects\
                 .exclude(pk=self.instance.pk)\
-                .get(email=email)
+                .get(email__iexact=email)
         except Account.DoesNotExist:
             return email
         raise forms.ValidationError('Email "%s" is already in use.' % email)

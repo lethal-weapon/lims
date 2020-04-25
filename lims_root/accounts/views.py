@@ -1,25 +1,19 @@
-from datetime import datetime
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from bulletin.models import Article, FacilitySchedule
 from .forms import AccountAuthenticationForm, AccountUpdateForm, RegistrationForm
 
 
+# Update account info
 @login_required(login_url=reverse_lazy('login'))
 def user_home(request):
-    context = {
-        # display future schedules and top 7 latest articles
-        'article_list' : Article.objects.order_by('-published')[:7],
-        'schedule_list': FacilitySchedule.objects.filter(
-            day__gte=datetime.today().date())
-    }
+    if request.method == 'GET':
+        return redirect(reverse_lazy('site-bulletin'))
 
-    # update account info
-    if request.method == 'POST':
+    elif request.method == 'POST':
+        context = {}
         form = AccountUpdateForm(request.POST, instance=request.user)
 
         if form.is_valid():
@@ -29,7 +23,7 @@ def user_home(request):
         else:
             context['account_update_message'] = 'This Email is Unavailable'
 
-    return render(request, 'bulletin/bulletin.html', context)
+        return render(request, 'accounts/home.html', context)
 
 
 def user_forgot(request):
@@ -37,9 +31,9 @@ def user_forgot(request):
 
 
 def user_login(request):
-    home_url = reverse_lazy('user-home')
+    bulletin_url = reverse_lazy('site-bulletin')
     if request.user.is_authenticated:
-        return redirect(home_url)
+        return redirect(bulletin_url)
 
     form = AccountAuthenticationForm()
     if request.method == 'POST':
@@ -49,11 +43,12 @@ def user_login(request):
                                 password=request.POST['password'])
             if user:
                 login(request, user)
-                return redirect(home_url)
+                return redirect(bulletin_url)
 
     return render(request, 'accounts/login.html', {'login_form': form})
 
 
+@login_required(login_url=reverse_lazy('login'))
 def user_logout(request):
     logout(request)
     return redirect('/')

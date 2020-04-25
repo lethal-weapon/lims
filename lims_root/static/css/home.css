@@ -72,10 +72,13 @@
 }
 
 .alert-position {
-  position:fixed;
-  margin-top:3rem;
   width:50%;
   margin-left:25%;
   z-index:10;
+  position:fixed;
   text-align:center;
+}
+
+#home-placeholder {
+  margin:10rem auto;
 }

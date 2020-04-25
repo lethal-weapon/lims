@@ -8,7 +8,7 @@ $(function () {
 });
 
 // Finger icons are blocked by default
-// Show the finger icon on current tab
+// Show the icon on left side of the current tab
 function setIconForLinks() {
   let selector = '.sidebar nav ul li > i';
   let currentURL = window.location.href;

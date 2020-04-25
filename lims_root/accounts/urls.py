@@ -13,8 +13,4 @@ urlpatterns = [
     path('success/', TemplateView.as_view(
         template_name='accounts/register-success.html'),
          name='register-success'),
-
-    path('tips/', TemplateView.as_view(
-        template_name='accounts/tips.html'),
-         name='site-tips'),
 ]
