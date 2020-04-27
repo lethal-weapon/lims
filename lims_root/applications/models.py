@@ -18,7 +18,7 @@ class Application(models.Model):
     start = models.DateField(verbose_name='Start Date')
     end = models.DateField(verbose_name='End Date')
     created_at = models.DateTimeField(auto_now_add=True)
-    applied_at = models.DateTimeField(verbose_name='Apply Time')
+    applied_at = models.DateTimeField(verbose_name='Apply Time', blank=True, null=True)
 
     status = models.CharField(max_length=3, choices=STATUS_CHOICES, default='PEN')
     reason = models.TextField(verbose_name='Apply Reason')

@@ -5,12 +5,44 @@
   Apply for Facility
 {% endblock title %}
 
-{% block extra-applications-style %}
-{% endblock extra-applications-style %}
-
 {% block application-content %}
+  <form method="post" action="{% url 'apply-facility' %}" class="apply-form">
+    {% csrf_token %}
+
+    <label for="alias">Application Alias</label>
+    <div class="form-group input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa fa-tag"></i></span>
+      </div>
+      <input type="text" id="alias" name="alias" class="form-control"
+             placeholder="Name Your Application" required autofocus/>
+    </div>
+
+    <label for="start">Borrowing Start Date</label>
+    <div class="form-group input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+      </div>
+      <input type="date" id="start" name="start" class="form-control" required/>
+    </div>
+
+    <label for="end">Borrowing End Date</label>
+    <div class="form-group input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+      </div>
+      <input type="date" id="end" name="end" class="form-control" required/>
+    </div>
+
+    <label for="reason">Apply Reason</label>
+    <div class="form-group">
+      <textarea id="reason" name="reason" rows="3" cols="40" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <button class="btn btn-lg btn-primary btn-block" type="submit">
+        <i class="fa fa-plus"></i> Add to List
+      </button>
+    </div>
+  </form>
 {% endblock application-content %}
-
-{% block extra-applications-script %}
-
-{% endblock extra-applications-script %}

@@ -5,12 +5,44 @@
   My List
 {% endblock title %}
 
-{% block extra-applications-style %}
-{% endblock extra-applications-style %}
-
 {% block application-content %}
+  <div class="list-wrapper">
+    <h3 class="list-title">Facility Applications</h3>
+    <hr/>
+    <table class="table table-striped application-table">
+      <thead>
+        <tr>
+          <th>Alias</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for facility_app in facility_application_list  %}
+        <tr>
+          <td class="cell-link"><a href="#" class="hvr-rotate">{{ facility_app.alias }}</a></td>
+          <td>{{ facility_app.start|date:"Y/m/d, D" }}</td>
+          <td>{{ facility_app.end|date:"Y/m/d, D" }}</td>
+          <td class="cell-status">{{ facility_app.get_status_display }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="list-divider"></div>
+
+  <div class="list-wrapper">
+    <h3 class="list-title">Research Applications</h3>
+    <hr/>
+  </div>
 {% endblock application-content %}
 
 {% block extra-applications-script %}
-
+  <script>
+    $(function () {
+      $('.application-table').DataTable();
+    });
+  </script>
 {% endblock extra-applications-script %}

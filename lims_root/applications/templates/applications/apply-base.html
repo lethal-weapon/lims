@@ -6,8 +6,7 @@
 {% endblock title %}
 
 {% block exrea-style %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/applications-base.css' %}"/>
-  {% block extra-applications-style %} {% endblock extra-applications-style %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/apply-base.css' %}"/>
 {% endblock exrea-style %}
 
 {% block main-content %}
@@ -17,21 +16,40 @@
         <nav>
           <ul>
             <li><i class="fa fa-hand-o-right"></i><a class="hvr-grow-shadow" href="{% url 'my-list' %}">My List</a></li>
+            <li class="dropdown-divider"></li>
             <li><i class="fa fa-hand-o-right"></i><a class="hvr-grow-shadow" href="{% url 'apply-facility' %}">Apply Facility</a></li>
-            <li><i class="fa fa-hand-o-right"></i><a class="hvr-grow-shadow" href="{% url 'apply-research' %}">Apply Research</a></li>
+            <li class="dropdown-divider"></li>
+            <li><i class="fa fa-hand-o-right"></i><a class="hvr-grow-shadow" href="{% url 'apply-research' %}">New Research</a></li>
+            <li class="dropdown-divider"></li>
           </ul>
         </nav>
       </aside>
 
       <section id="apply-base-content">
-        {% block application-content %}
-        {% endblock application-content %}
+        <div class="container-fluid">
+          <div class="container">
+            {% if apply_message %}
+              {% if is_success %}
+                <div class="alert alert-success text-center">
+                  <strong>{{ apply_message }}</strong>
+                </div>
+              {% else %}
+                <div class="alert alert-danger text-center">
+                  <strong>{{ apply_message }}</strong>
+                </div>
+              {% endif %}
+            {% endif %}
+
+            {% block application-content %}
+            {% endblock application-content %}
+          </div>
+        </div>
       </section>
     </div>
   </div>
 {% endblock main-content %}
 
 {% block extra-script %}
-  <script src="{% static 'js/applications-base.js' %}"></script>
+  <script src="{% static 'js/apply-base.js' %}"></script>
   {% block extra-applications-script %} {% endblock extra-applications-script %}
 {% endblock extra-script %}
