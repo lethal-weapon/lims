@@ -1,18 +1,30 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import reverse_lazy
-
+from inventory.models import Apparatus, Laboratory
 from .forms import FacilityApplicationForm
 from .models import FacilityApplication, ResearchApplication
 
 
 @login_required(login_url=reverse_lazy('login'))
 def my_list(request):
+    fal = FacilityApplication.objects.filter(applicant=request.user)
+    ral = ResearchApplication.objects.filter(applicant=request.user)
+    apparatus_ids = [apparatus.id for apparatus in Apparatus.objects.all()]
+
+    context = {}
+    for fa in fal:
+        context[fa] = {'apparatus_list': [], 'lab_list': []}
+        for f in fa.items.all():
+            if f.id in apparatus_ids:
+                context[fa]['apparatus_list'].append(Apparatus.objects.get(id=f.id))
+            else:
+                context[fa]['lab_list'].append(Laboratory.objects.get(id=f.id))
+
     return render(request, 'applications/my-list.html', {
-        'facility_application_list':
-            FacilityApplication.objects.filter(applicant=request.user),
-        'research_application_list':
-            ResearchApplication.objects.filter(applicant=request.user),
+        'facility_application_list': fal,
+        'research_application_list': ral,
+        'context': context,
     })
 
 
@@ -36,12 +48,12 @@ def apply_facility(request):
                 pass
             app.save()
             return render(request, 'applications/apply-facility.html', {
-                'apply_message': 'Application Saved',
+                'apply_message': 'Application Added',
                 'is_success'   : True,
             })
 
         return render(request, 'applications/apply-facility.html', {
-            'apply_message': 'Please Fill Fields with Correct Input',
+            'apply_message': 'Please Fill Fields with Reasonable Input',
             'is_success'   : False,
         })
 

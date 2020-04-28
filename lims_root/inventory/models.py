@@ -19,5 +19,5 @@ class Apparatus(Facility):
 
 
 class Laboratory(Facility):
-    location = models.CharField(max_length=50)
+    location = models.CharField(max_length=50, unique=True)
     capacity = models.IntegerField(default=5)

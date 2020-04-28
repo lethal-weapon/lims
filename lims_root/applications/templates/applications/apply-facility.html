@@ -9,34 +9,25 @@
   <form method="post" action="{% url 'apply-facility' %}" class="apply-form">
     {% csrf_token %}
 
-    <label for="alias">Application Alias</label>
-    <div class="form-group input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa fa-tag"></i></span>
-      </div>
+    <div class="form-group">
+      <label for="alias" class="col-form-label">Application Alias</label>
       <input type="text" id="alias" name="alias" class="form-control"
              placeholder="Name Your Application" required autofocus/>
     </div>
 
-    <label for="start">Borrowing Start Date</label>
-    <div class="form-group input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-      </div>
+    <div class="form-group">
+      <label for="start" class="col-form-label">Borrowing Start Date</label>
       <input type="date" id="start" name="start" class="form-control" required/>
     </div>
 
-    <label for="end">Borrowing End Date</label>
-    <div class="form-group input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-      </div>
+    <div class="form-group">
+      <label for="end" class="col-form-label">Borrowing End Date</label>
       <input type="date" id="end" name="end" class="form-control" required/>
     </div>
 
-    <label for="reason">Apply Reason</label>
     <div class="form-group">
-      <textarea id="reason" name="reason" rows="3" cols="40" required></textarea>
+      <label for="reason" class="col-form-label">Apply Reason</label>
+      <textarea class="form-control" id="reason" name="reason" required></textarea>
     </div>
 
     <div class="form-group">

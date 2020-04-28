@@ -41,7 +41,7 @@
 
 #apply-base-content {
   float:left;
-  min-width:65%;
+  min-width:70%;
   min-height:400px;
   padding-top:1rem;
   border-radius:10px;
@@ -50,37 +50,10 @@
 }
 
 .apply-form {
-  width:70%;
+  width:60%;
   margin:2rem auto;
 }
 
 .apply-form label {
   font-weight:bold;
-}
-
-.list-divider {
-  width:100%;
-  height:2px;
-  margin:3rem 0 3rem 0;
-  background-color:red;
-}
-
-.list-title {
-  color:black;
-  text-align:center;
-  font-family:cursive;
-}
-
-.cell-status {
-  color:deepskyblue;
-  font-weight:bolder;
-}
-
-.cell-link > a {
-  color:black;
-}
-
-.cell-link > a:hover {
-  color:green;
-  text-decoration:none;
 }

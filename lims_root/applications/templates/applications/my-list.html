@@ -5,23 +5,29 @@
   My List
 {% endblock title %}
 
+{% block extra-applications-style %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/my-list.css' %}"/>
+{% endblock extra-applications-style %}
+
 {% block application-content %}
   <div class="list-wrapper">
     <h3 class="list-title">Facility Applications</h3>
     <hr/>
     <table class="table table-striped application-table">
       <thead>
-        <tr>
-          <th>Alias</th>
-          <th>Start</th>
-          <th>End</th>
-          <th>Status</th>
-        </tr>
+      <tr>
+        <th><i class="fa fa-tag"></i> Alias</th>
+        <th><i class="fa fa-calendar-check-o"></i> Start</th>
+        <th><i class="fa fa-calendar-times-o"></i> End</th>
+        <th><i class="fa fa-exclamation-circle"></i> Status</th>
+      </tr>
       </thead>
       <tbody>
-      {% for facility_app in facility_application_list  %}
+      {% for facility_app in facility_application_list %}
         <tr>
-          <td class="cell-link"><a href="#" class="hvr-rotate">{{ facility_app.alias }}</a></td>
+          <td class="cell-link">
+            <a href="#facility-{{ facility_app.id }}-detail-modal"
+               class="hvr-wobble-skew" data-toggle="modal">{{ facility_app.alias }}</a></td>
           <td>{{ facility_app.start|date:"Y/m/d, D" }}</td>
           <td>{{ facility_app.end|date:"Y/m/d, D" }}</td>
           <td class="cell-status">{{ facility_app.get_status_display }}</td>
@@ -30,14 +36,133 @@
       </tbody>
     </table>
   </div>
-
   <div class="list-divider"></div>
-
   <div class="list-wrapper">
     <h3 class="list-title">Research Applications</h3>
     <hr/>
   </div>
 {% endblock application-content %}
+
+{% block extra-modal %}
+  {% for facility_app in facility_application_list %}
+    <div class="modal fade" id="facility-{{ facility_app.id }}-detail-modal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Application Status -
+              {% if facility_app.status == 'PEN' or facility_app.status == 'CLO' %}
+                <strong class="text-dark">{{ facility_app.get_status_display }}</strong>
+              {% elif facility_app.status == 'ONG' or facility_app.status == 'BOR' %}
+                <strong class="text-success">{{ facility_app.get_status_display }}</strong>
+              {% elif facility_app.status == 'APP' %}
+                <strong class="text-primary">{{ facility_app.get_status_display }}</strong>
+              {% elif facility_app.status == 'WAI' %}
+                <strong class="text-info">{{ facility_app.get_status_display }}</strong>
+              {% else %}
+                <strong class="text-danger">{{ facility_app.get_status_display }}</strong>
+              {% endif %}
+            </h4>
+          </div>
+
+          <form method="post" action="{% url 'update-facility' 0 %}" class="update-form">
+            {% csrf_token %}
+            <div class="modal-body">
+              <table class="application-detail-table">
+                <tr>
+                  <td class="cell-title"><i class="fa fa-tag"></i> Alias</td>
+                  <td colspan="2"><input type="text" id="alias" name="alias" class="form-control"
+                       placeholder="{{ facility_app.alias }}" title="Application Alias"/></td>
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-calendar-check-o"></i> Start Date</td>
+                  <td>{{ facility_app.start|date:"Y/m/d, D" }}</td>
+                  {% if facility_app.status == 'PEN' %}
+                    <td><input type="date" id="start" name="start" class="form-control"/></td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-calendar-times-o"></i> End Date</td>
+                  <td>{{ facility_app.end|date:"Y/m/d, D" }}</td>
+                  {% if facility_app.status == 'PEN' %}
+                    <td><input type="date" id="end" name="end" class="form-control"/></td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-question"></i> Apply Reason</td>
+                  <td colspan="2">
+                    {% if facility_app.status == 'PEN' %}
+                      <textarea class="form-control" name="reason">{{ facility_app.reason }}</textarea>
+                    {% else %}
+                      <textarea class="form-control" name="reason" readonly>{{ facility_app.reason }}</textarea>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-reply"></i> Staff Reply</td>
+                  <td colspan="2">
+                    {% if facility_app.status == 'PEN' %}
+                      <textarea class="form-control" readonly>You haven't applied it yet.</textarea>
+                    {% else %}
+                      <textarea class="form-control" readonly>{{ facility_app.reply }}</textarea>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-bell-o"></i> Created at</td>
+                  <td colspan="2">{{ facility_app.created_at|date:"Y/m/d, h:ia" }}</td>
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-bell"></i> Applied at</td>
+                  <td colspan="2">
+                    {% if facility_app.status == 'PEN' %}
+                      -
+                    {% else %}
+                      {{ facility_app.applied_at|date:"Y/m/d, h:ia" }}
+                    {% endif %}
+                  </td>
+                </tr>
+              </table>
+              <hr />
+
+              <h5 class="text-center"><i class="fa fa-list-ul"></i> Facility List</h5>
+              <div id="facility-summary-wrapper">
+                <ul>
+                  {% for fa, lists in context.items %}
+                    {% if fa == facility_app %}
+                      {% for list_name, list in lists.items %}
+                        {% if list_name == 'apparatus_list' %}
+                          {% for apparatus in list %}
+                            <li><h6 class="text-secondary"><i class="fa fa-flask"></i>
+                              &nbsp;{{ apparatus.name }} - {{ apparatus.model_no }}
+                             <button type="button" class="btn btn-warning btn-sm pull-right">
+                               <i class="fa fa-remove"></i> Remove</button>
+                            </h6></li>
+                          {% endfor %}
+                        {% else %}
+                          {% for lab in list %}
+                            <li><h6 class="text-secondary"><i class="fa fa-building"></i>
+                              &nbsp;{{ lab.location }} - {{ lab.capacity }}
+                            <button type="button" class="btn btn-warning btn-sm pull-right">
+                              <i class="fa fa-remove"></i> Remove</button>
+                            </h6></li>
+                          {% endfor %}
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock extra-modal %}
 
 {% block extra-applications-script %}
   <script>
