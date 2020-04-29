@@ -65,7 +65,7 @@
             </h4>
           </div>
 
-          <form method="post" class="update-form" id="update-form-{{ facility_app.id }}"
+          <form method="post" class="update-form"
                 data-update-url="{% url 'update-facility-application' %}"
                 data-delete-url="{% url 'delete-facility-application' %}">
             {% csrf_token %}

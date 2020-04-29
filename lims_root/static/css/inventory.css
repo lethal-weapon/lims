@@ -8,6 +8,7 @@
 }
 
 .section-title {
+  padding-top:1rem;
   color:black;
   font-family:cursive;
 }
@@ -33,5 +34,27 @@
 }
 
 .inventory-table tr:hover {
+  background-color:lightyellow;
+}
+
+.inventory-table td > a:hover {
+  color:green;
+}
+
+.choose-list-form {
+  width:90%;
+  margin:1rem auto;
+}
+
+.choose-list-wrapper ul li {
+  padding:15px 0 5px 25px;
+  margin-top:1rem;
+  border-radius:30px;
+  list-style-type:none;
   background-color:lightskyblue;
+}
+
+.choose-list-wrapper ul li button {
+  margin:-7px 20px 15px 0;
+  border-radius:30px;
 }
