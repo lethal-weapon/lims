@@ -61,30 +61,34 @@
               {% else %}
                 <strong class="text-danger">{{ facility_app.get_status_display }}</strong>
               {% endif %}
+              <em id="update-message-{{ facility_app.id }}"></em>
             </h4>
           </div>
 
-          <form method="post" action="{% url 'update-facility' 0 %}" class="update-form">
+          <form method="post" class="update-form" id="update-form-{{ facility_app.id }}"
+                data-update-url="{% url 'update-facility-application' %}"
+                data-delete-url="{% url 'delete-facility-application' %}">
             {% csrf_token %}
+            <input type="hidden" name="id" value="{{ facility_app.id }}" />
             <div class="modal-body">
               <table class="application-detail-table">
                 <tr>
                   <td class="cell-title"><i class="fa fa-tag"></i> Alias</td>
-                  <td colspan="2"><input type="text" id="alias" name="alias" class="form-control"
+                  <td colspan="2"><input type="text" name="alias" class="form-control"
                        placeholder="{{ facility_app.alias }}" title="Application Alias"/></td>
                 </tr>
                 <tr>
                   <td class="cell-title"><i class="fa fa-calendar-check-o"></i> Start Date</td>
                   <td>{{ facility_app.start|date:"Y/m/d, D" }}</td>
                   {% if facility_app.status == 'PEN' %}
-                    <td><input type="date" id="start" name="start" class="form-control"/></td>
+                    <td><input type="date" name="start" class="form-control"/></td>
                   {% endif %}
                 </tr>
                 <tr>
                   <td class="cell-title"><i class="fa fa-calendar-times-o"></i> End Date</td>
                   <td>{{ facility_app.end|date:"Y/m/d, D" }}</td>
                   {% if facility_app.status == 'PEN' %}
-                    <td><input type="date" id="end" name="end" class="form-control"/></td>
+                    <td><input type="date" name="end" class="form-control"/></td>
                   {% endif %}
                 </tr>
                 <tr>
@@ -125,7 +129,7 @@
               <hr />
 
               <h5 class="text-center"><i class="fa fa-list-ul"></i> Facility List</h5>
-              <div id="facility-summary-wrapper">
+              <div class="facility-summary-wrapper">
                 <ul>
                   {% for fa, lists in context.items %}
                     {% if fa == facility_app %}
@@ -134,16 +138,20 @@
                           {% for apparatus in list %}
                             <li><h6 class="text-secondary"><i class="fa fa-flask"></i>
                               &nbsp;{{ apparatus.name }} - {{ apparatus.model_no }}
-                             <button type="button" class="btn btn-warning btn-sm pull-right">
-                               <i class="fa fa-remove"></i> Remove</button>
+                              {% if facility_app.status == 'PEN' %}
+                                <button type="button" class="btn btn-warning btn-sm pull-right">
+                                  <i class="fa fa-remove"></i> Remove</button>
+                              {% endif %}
                             </h6></li>
                           {% endfor %}
                         {% else %}
                           {% for lab in list %}
                             <li><h6 class="text-secondary"><i class="fa fa-building"></i>
                               &nbsp;{{ lab.location }} - {{ lab.capacity }}
-                            <button type="button" class="btn btn-warning btn-sm pull-right">
-                              <i class="fa fa-remove"></i> Remove</button>
+                              {% if facility_app.status == 'PEN' %}
+                                <button type="button" class="btn btn-warning btn-sm pull-right">
+                                  <i class="fa fa-remove"></i> Remove</button>
+                              {% endif %}
                             </h6></li>
                           {% endfor %}
                         {% endif %}
@@ -154,8 +162,14 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+              <button type="button" class="btn btn-primary btn-save"><i class="fa fa-save"></i> Save</button>
+              {% if facility_app.status == 'PEN' %}
+                <button type="button" class="btn btn-success"><i class="fa fa-send"></i> Save & Apply</button>
+              {% endif %}
+              <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+              {% if facility_app.status == 'PEN' or facility_app.status == 'CLO' %}
+                <button type="button" class="btn btn-danger btn-delete"><i class="fa fa-times"></i> Delete</button>
+              {% endif %}
             </div>
           </form>
         </div>
@@ -165,9 +179,5 @@
 {% endblock extra-modal %}
 
 {% block extra-applications-script %}
-  <script>
-    $(function () {
-      $('.application-table').DataTable();
-    });
-  </script>
+  <script src="{% static 'js/my-list.js' %}"></script>
 {% endblock extra-applications-script %}

@@ -1,6 +1,10 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+
 from inventory.models import Apparatus, Laboratory
 from .forms import FacilityApplicationForm
 from .models import FacilityApplication, ResearchApplication
@@ -24,13 +28,8 @@ def my_list(request):
     return render(request, 'applications/my-list.html', {
         'facility_application_list': fal,
         'research_application_list': ral,
-        'context': context,
+        'context'                  : context,
     })
-
-
-@login_required(login_url=reverse_lazy('login'))
-def update_facility(request, pk):
-    pass
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -62,3 +61,32 @@ def apply_facility(request):
 def apply_research(request):
     return render(request, 'applications/apply-research.html', {
     })
+
+
+@login_required(login_url=reverse_lazy('login'))
+def update_facility_application(request):
+    data = request.GET
+    fa = FacilityApplication.objects.get(id=data.get('id'))
+
+    if len(data.get('alias')) > 0:
+        fa.alias = data.get('alias')
+
+    if fa.status == 'PEN':
+        start, end, reason = data.get('start'), data.get('end'), data.get('reason')
+
+        if len(start) > 0 and start > str(datetime.today().date()):
+            fa.start = start
+        if len(end) > 0 and end > str(datetime.today().date()) and end > str(fa.start):
+            fa.end = end
+        if reason != fa.reason:
+            fa.reason = reason
+
+    fa.save()
+    return JsonResponse({'id': fa.id, 'message': 'Updated'})
+
+
+@login_required(login_url=reverse_lazy('login'))
+def delete_facility_application(request):
+    FacilityApplication.objects.get(id=request.GET.get('id')).delete()
+
+    return JsonResponse({'message': 'Deleted'})
