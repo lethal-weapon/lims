@@ -13,6 +13,14 @@ $(function () {
   $('.btn-delete').on('click', function () {
     deleteApplication($(this).closest('form'));
   });
+
+  $('.btn-remove').on('click', function () {
+    removeFromList(
+      $(this),
+      $(this).closest('form').attr('data-remove-url'),
+      $(this).closest('form').attr('data-facility-app-id'),
+      $(this).attr('data-facility-id'));
+  });
 });
 
 // Save button action
@@ -25,10 +33,8 @@ function saveApplication(form) {
 
     success: function (data) {
       let selector = '#update-message-' + data['id'];
-      $(selector).addClass('alert alert-success text-center');
-      $(selector).text(data['message']);
       $(selector).fadeIn(300);
-      $(selector).fadeOut(5000);
+      $(selector).fadeOut(3000);
     }
   });
 }
@@ -44,6 +50,25 @@ function deleteApplication(form) {
     // refresh my list page
     success: function (data) {
       window.location.replace(window.location.href);
+    }
+  });
+}
+
+// Remove button action
+function removeFromList(button, removeURL, facilityAppID, facilityID) {
+  $.ajax({
+    url: removeURL,
+    data: {
+      'facility_id': facilityID,
+      'facility_app_id': facilityAppID
+    },
+    timeout: 2000,
+    dataType: 'json',
+
+    success: function (data) {
+      if (data['is_success']) {
+        $(button).closest('li').fadeOut(1000);
+      }
     }
   });
 }

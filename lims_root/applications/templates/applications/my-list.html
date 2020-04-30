@@ -30,7 +30,19 @@
                class="hvr-wobble-skew" data-toggle="modal">{{ facility_app.alias }}</a></td>
           <td>{{ facility_app.start|date:"Y/m/d, D" }}</td>
           <td>{{ facility_app.end|date:"Y/m/d, D" }}</td>
-          <td class="cell-status">{{ facility_app.get_status_display }}</td>
+          <td>
+            {% if facility_app.status == 'PEN' or facility_app.status == 'CLO' %}
+              <strong class="text-dark">{{ facility_app.get_status_display }}</strong>
+            {% elif facility_app.status == 'ONG' or facility_app.status == 'BOR' %}
+              <strong class="text-success">{{ facility_app.get_status_display }}</strong>
+            {% elif facility_app.status == 'APP' %}
+              <strong class="text-primary">{{ facility_app.get_status_display }}</strong>
+            {% elif facility_app.status == 'WAI' %}
+              <strong class="text-info">{{ facility_app.get_status_display }}</strong>
+            {% else %}
+              <strong class="text-danger">{{ facility_app.get_status_display }}</strong>
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
       </tbody>
@@ -61,13 +73,14 @@
               {% else %}
                 <strong class="text-danger">{{ facility_app.get_status_display }}</strong>
               {% endif %}
-              <em id="update-message-{{ facility_app.id }}"></em>
             </h4>
           </div>
 
           <form method="post" class="update-form"
                 data-update-url="{% url 'update-facility-application' %}"
-                data-delete-url="{% url 'delete-facility-application' %}">
+                data-delete-url="{% url 'delete-facility-application' %}"
+                data-remove-url="{% url 'remove-facility-from-list' %}"
+                data-facility-app-id="{{ facility_app.id }}">
             {% csrf_token %}
             <input type="hidden" name="id" value="{{ facility_app.id }}" />
             <div class="modal-body">
@@ -129,6 +142,10 @@
               <hr />
 
               <h5 class="text-center"><i class="fa fa-list-ul"></i> Facility List</h5>
+              {% if facility_app.status == 'PEN' %}
+                <h6 class="text-center text-danger"><i class="fa fa-exclamation-triangle"></i>
+                  Remove will take effect immediately</h6>
+              {% endif %}
               <div class="facility-summary-wrapper">
                 <ul>
                   {% for fa, lists in context.items %}
@@ -139,7 +156,8 @@
                             <li><h6 class="text-secondary"><i class="fa fa-flask"></i>
                               &nbsp;{{ apparatus.name }} - {{ apparatus.model_no }}
                               {% if facility_app.status == 'PEN' %}
-                                <button type="button" class="btn btn-warning btn-sm pull-right">
+                                <button type="button" class="btn btn-warning btn-sm btn-remove pull-right hvr-grow"
+                                        data-facility-id="{{ apparatus.id }}">
                                   <i class="fa fa-remove"></i> Remove</button>
                               {% endif %}
                             </h6></li>
@@ -149,7 +167,8 @@
                             <li><h6 class="text-secondary"><i class="fa fa-building"></i>
                               &nbsp;{{ lab.location }} - {{ lab.capacity }}
                               {% if facility_app.status == 'PEN' %}
-                                <button type="button" class="btn btn-warning btn-sm pull-right">
+                                <button type="button" class="btn btn-warning btn-sm btn-remove pull-right hvr-grow"
+                                        data-facility-id="{{ lab.id }}">
                                   <i class="fa fa-remove"></i> Remove</button>
                               {% endif %}
                             </h6></li>
@@ -162,6 +181,7 @@
               </div>
             </div>
             <div class="modal-footer">
+              <i class="fa fa-check fa-lg text-success update-message" id="update-message-{{ facility_app.id }}"></i>
               <button type="button" class="btn btn-primary btn-save"><i class="fa fa-save"></i> Save</button>
               {% if facility_app.status == 'PEN' %}
                 <button type="button" class="btn btn-success"><i class="fa fa-send"></i> Save & Apply</button>

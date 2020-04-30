@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
-from inventory.models import Apparatus, Laboratory
+from inventory.models import Apparatus, Facility, Laboratory
 from .forms import FacilityApplicationForm
 from .models import FacilityApplication, ResearchApplication
 
@@ -89,4 +89,20 @@ def update_facility_application(request):
 def delete_facility_application(request):
     FacilityApplication.objects.get(id=request.GET.get('id')).delete()
 
-    return JsonResponse({'message': 'Deleted'})
+    return JsonResponse({'is_success': True})
+
+
+# Remove a facility from 'items' field of an
+# application list whose status is PENDING
+@login_required(login_url=reverse_lazy('login'))
+def remove_facility_from_list(request):
+    f = Facility.objects.get(id=request.GET.get('facility_id'))
+    fa = FacilityApplication.objects.get(id=request.GET.get('facility_app_id'))
+
+    if f and fa:
+        if fa.status == 'PEN' and (f in fa.items.all()):
+            fa.items.remove(f)
+            fa.save()
+            return JsonResponse({'is_success': True})
+
+    return JsonResponse({'is_success': False})

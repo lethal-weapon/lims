@@ -11,17 +11,13 @@
   font-family:cursive;
 }
 
-.cell-status {
-  color:deepskyblue;
-  font-weight:bolder;
-}
-
 .cell-link > a {
   color:black;
 }
 
 .cell-link > a:hover {
   color:green;
+  font-weight:bold;
   text-decoration:none;
 }
 
@@ -51,4 +47,8 @@
 .facility-summary-wrapper ul li button {
   margin:-7px 20px 15px 0;
   border-radius:30px;
+}
+
+.update-message {
+  display:none;
 }

@@ -11,4 +11,6 @@ urlpatterns = [
          name='update-facility-application'),
     path('delete-facility/', views.delete_facility_application,
          name='delete-facility-application'),
+    path('remove-facility-from-list/', views.remove_facility_from_list,
+         name='remove-facility-from-list'),
 ]
