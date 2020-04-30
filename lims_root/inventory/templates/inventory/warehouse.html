@@ -11,13 +11,13 @@
 
 {% block main-content %}
   {% if user.is_verified %}
-  <div class="container-fluid apparatus-section">
-    <div class="container">
-      <h3 class="section-title"><i class="fa fa-flask fa-lg"></i>&nbsp; Apparatus</h3>
-    </div>
-    <div class="container table-wrapper">
-      <table class="table table-striped inventory-table">
-        <thead>
+    <div class="container-fluid apparatus-section">
+      <div class="container">
+        <h3 class="section-title"><i class="fa fa-flask fa-lg"></i>&nbsp; Apparatus</h3>
+      </div>
+      <div class="container table-wrapper">
+        <table class="table table-striped inventory-table">
+          <thead>
           <tr>
             <th>Name</th>
             <th>Model #</th>
@@ -26,31 +26,31 @@
             <th>Purchased</th>
             <th></th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           {% for apparatus in apparatus_list %}
-          <tr>
-            <td>{{ apparatus.name }}</td>
-            <td>{{ apparatus.model_no }}</td>
-            <td>{{ apparatus.school }}</td>
-            <td>${{ apparatus.cost }}</td>
-            <td>{{ apparatus.purchased|date:"Y/m" }}</td>
-            <td class="hvr-push"><a href="#facility-{{ apparatus.id }}-modal" data-toggle="modal">
-              <i class="fa fa-plus-circle fa-lg"></i></a></td>
-          </tr>
+            <tr>
+              <td>{{ apparatus.name }}</td>
+              <td>{{ apparatus.model_no }}</td>
+              <td>{{ apparatus.school }}</td>
+              <td>${{ apparatus.cost }}</td>
+              <td>{{ apparatus.purchased|date:"Y/m" }}</td>
+              <td class="hvr-push"><a href="#facility-{{ apparatus.id }}-modal" data-toggle="modal">
+                <i class="fa fa-plus-circle fa-lg"></i></a></td>
+            </tr>
           {% endfor %}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <div class="container-fluid laboratory-section">
-    <div class="container">
-      <h3 class="section-title"><i class="fa fa-building fa-lg"></i>&nbsp; Labs</h3>
-    </div>
-    <div class="container table-wrapper">
-      <table class="table table-striped inventory-table">
-        <thead>
+    <div class="container-fluid laboratory-section">
+      <div class="container">
+        <h3 class="section-title"><i class="fa fa-building fa-lg"></i>&nbsp; Labs</h3>
+      </div>
+      <div class="container table-wrapper">
+        <table class="table table-striped inventory-table">
+          <thead>
           <tr>
             <th>Location</th>
             <th>Capacity</th>
@@ -58,75 +58,75 @@
             <th>Label</th>
             <th></th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           {% for lab in laboratory_list %}
-          <tr>
-            <td>{{ lab.location }}</td>
-            <td>{{ lab.capacity }}</td>
-            <td>{{ lab.school }}</td>
-            <td>{{ lab.name }}</td>
-            <td class="hvr-push"><a href="#facility-{{ lab.id }}-modal" data-toggle="modal">
-              <i class="fa fa-plus-circle fa-lg"></i></a></td>
-          </tr>
+            <tr>
+              <td>{{ lab.location }}</td>
+              <td>{{ lab.capacity }}</td>
+              <td>{{ lab.school }}</td>
+              <td>{{ lab.name }}</td>
+              <td class="hvr-push"><a href="#facility-{{ lab.id }}-modal" data-toggle="modal">
+                <i class="fa fa-plus-circle fa-lg"></i></a></td>
+            </tr>
           {% endfor %}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
   {% else %}
-  <div class="container-fluid forbidden-section">
-    <div class="container">
-      <h1 class="section-invalid-title">FORBIDDEN ACCESS</h1>
+    <div class="container-fluid forbidden-section">
+      <div class="container">
+        <h1 class="section-invalid-title">FORBIDDEN ACCESS</h1>
+      </div>
     </div>
-  </div>
   {% endif %}
 {% endblock main-content %}
 
 {% block extra-modal %}
-  {% for facility in facility_list %}
-    <div class="modal fade" id="facility-{{ facility.id }}-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Choose an Application</h4>
-          </div>
-          <div class="modal-body">
-            <form method="post" class="choose-list-form"
-                  data-add-url="{% url 'add-facility-to-list' %}">
-              {% csrf_token %}
-              <input type="hidden" name="facility_id" value="{{ facility.id }}" />
-
-              <h5 class="text-center"><i class="fa fa-list-ul"></i> Application List</h5>
-              <div class="choose-list-wrapper">
-                <ul>
-                  {% for facility_app in facility_application_list %}
-                    <li><h6 class="text-secondary">
-                      {% if facility in facility_app.items.all %}
-                        <i class="fa fa-check"></i>
-                        &nbsp; {{ facility_app.alias }}
-                      {% else %}
-                        <i class="fa fa-times"></i>
-                        &nbsp; {{ facility_app.alias }}
-                        <button type="button" class="btn btn-warning btn-sm pull-right">
-                          <i class="fa fa-plus"></i> Add</button>
-                      {% endif %}
-                    </h6></li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </form>
+  {% if user.is_verified %}
+    {% for facility in facility_list %}
+      <div class="modal fade" id="facility-{{ facility.id }}-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Choose an Application</h4>
+            </div>
+            <div class="modal-body">
+              <form method="post" class="choose-list-form"
+                    data-add-url="{% url 'add-facility-to-list' %}"
+                    data-facility-id="{{ facility.id }}">
+                {% csrf_token %}
+                <h5 class="text-center"><i class="fa fa-list-ul"></i> Application List</h5>
+                <div class="choose-list-wrapper">
+                  <ul>
+                    {% for facility_app in facility_application_list %}
+                      <li>
+                        <h6 class="text-secondary">
+                          {% if facility in facility_app.items.all %}
+                            <i class="fa fa-check text-success"></i>
+                            &nbsp; {{ facility_app.alias }}
+                          {% else %}
+                            <i class="fa fa-times text-dark"></i>
+                            &nbsp; {{ facility_app.alias }}
+                            <button type="button" class="btn btn-warning btn-sm btn-add pull-right hvr-grow"
+                                    data-facility-app-id="{{ facility_app.id }}">
+                              <i class="fa fa-plus"></i> Add</button>
+                          {% endif %}
+                        </h6>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  {% endfor %}
+    {% endfor %}
+  {% endif %}
 {% endblock extra-modal %}
 
 {% block extra-script %}
-  <script>
-    $(function () {
-      $('table.inventory-table').DataTable();
-    });
-  </script>
+  <script src="{% static 'js/inventory.js' %}"></script>
 {% endblock extra-script %}
