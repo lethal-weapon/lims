@@ -6,12 +6,8 @@
 $(function () {
   $('.application-table').DataTable();
 
-  $('.btn-save').on('click', function () {
-    saveApplication($(this).closest('form'));
-  });
-
-  $('.btn-delete').on('click', function () {
-    deleteApplication($(this).closest('form'));
+  $('.btn-action').on('click', function () {
+    ajaxFA($(this).attr('data-action'), $(this).closest('form'));
   });
 
   $('.btn-remove').on('click', function () {
@@ -23,38 +19,49 @@ $(function () {
   });
 });
 
-// Save button action
-function saveApplication(form) {
+// All bottom buttons' action on fa detail window
+function ajaxFA(action, form) {
   $.ajax({
-    url: form.attr('data-update-url'),
-    data: form.serialize(),
+    url: form.attr('data-ajax-url'),
+    data: form.serialize() + '&action=' + action,
     timeout: 2000,
     dataType: 'json',
 
     success: function (data) {
-      let selector = '#update-message-' + data['id'];
-      $(selector).fadeIn(300);
-      $(selector).fadeOut(3000);
+      switch (action) {
+        case 'APPLY': {
+          if (data['is_success']) {
+            // refresh my list page
+            window.location.replace(window.location.href);
+          } else {
+            let selector = '#apply-message-' + data['id'];
+            $(selector + ' > span').text(data['message']);
+            $(selector).fadeIn(1000);
+          }
+          break;
+        }
+        case 'UPDATE': {
+          let selector = '#update-message-' + data['id'];
+          $(selector).fadeIn(300);
+          $(selector).fadeOut(3000);
+          break;
+        }
+        case 'WITHDRAW':
+        case 'DELETE': {
+          if (data['is_success']) {
+            // refresh my list page
+            window.location.replace(window.location.href);
+          }
+          break;
+        }
+        default:
+          break;
+      }
     }
   });
 }
 
-// Delete button action
-function deleteApplication(form) {
-  $.ajax({
-    url: form.attr('data-delete-url'),
-    data: form.serialize(),
-    timeout: 2000,
-    dataType: 'json',
-
-    // refresh my list page
-    success: function (data) {
-      window.location.replace(window.location.href);
-    }
-  });
-}
-
-// Remove button action
+// Remove button action on fa detail window
 function removeFromList(button, removeURL, facilityAppID, facilityID) {
   $.ajax({
     url: removeURL,

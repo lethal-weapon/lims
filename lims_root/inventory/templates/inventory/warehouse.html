@@ -98,6 +98,10 @@
                     data-facility-id="{{ facility.id }}">
                 {% csrf_token %}
                 <h5 class="text-center"><i class="fa fa-list-ul"></i> Application List</h5>
+                {% if facility_application_list.count == 0 %}
+                  <h6 class="text-center text-info"><i class="fa fa-exclamation-triangle"></i>
+                  No application is pending</h6>
+                {% endif %}
                 <div class="choose-list-wrapper">
                   <ul>
                     {% for facility_app in facility_application_list %}

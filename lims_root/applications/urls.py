@@ -4,13 +4,16 @@ from . import views
 
 urlpatterns = [
     path('my-list/', views.my_list, name='my-list'),
-    path('apply-facility/', views.apply_facility, name='apply-facility'),
-    path('apply-research/', views.apply_research, name='apply-research'),
 
-    path('update-facility/', views.update_facility_application,
-         name='update-facility-application'),
-    path('delete-facility/', views.delete_facility_application,
-         name='delete-facility-application'),
-    path('remove-facility-from-list/', views.remove_facility_from_list,
+    path('cfa/', views.create_facility_application,
+         name='create-facility-application'),
+    path('ajax-fa/', views.ajax_fa_switcher,
+         name='ajax-fa'),
+    path('ajax-rffl', views.remove_facility_from_list,
          name='remove-facility-from-list'),
+
+
+    path('cra/', views.create_research_application,
+         name='create-research-application'),
+
 ]

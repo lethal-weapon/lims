@@ -22,4 +22,4 @@ class FacilityApplicationForm(ModelForm):
                 raise forms.ValidationError("Application should be at least 24H in advance")
 
             if end <= start:
-                raise forms.ValidationError("Duration must be at least 24H")
+                raise forms.ValidationError("Duration should be at least 24H")

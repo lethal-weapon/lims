@@ -77,8 +77,7 @@
           </div>
 
           <form method="post" class="update-form"
-                data-update-url="{% url 'update-facility-application' %}"
-                data-delete-url="{% url 'delete-facility-application' %}"
+                data-ajax-url="{% url 'ajax-fa' %}"
                 data-remove-url="{% url 'remove-facility-from-list' %}"
                 data-facility-app-id="{{ facility_app.id }}">
             {% csrf_token %}
@@ -141,8 +140,11 @@
               </table>
               <hr />
 
-              <h5 class="text-center"><i class="fa fa-list-ul"></i> Facility List</h5>
-              {% if facility_app.status == 'PEN' %}
+              <h5 class="text-center"><i class="fa fa-list-ul"></i>
+                 Facility List &nbsp;
+                <small class="text-dark">({{ user_quota }} / {{ user.limit }})</small>
+              </h5>
+              {% if facility_app.status == 'PEN' and facility_app.items.count > 1 %}
                 <h6 class="text-center text-danger"><i class="fa fa-exclamation-triangle"></i>
                   Remove will take effect immediately</h6>
               {% endif %}
@@ -179,16 +181,20 @@
                   {% endfor %}
                 </ul>
               </div>
+              <h6 class="text-center text-info apply-message" id="apply-message-{{ facility_app.id }}">
+                <i class="fa fa-exclamation-circle"></i>&nbsp;<span></span></h6>
             </div>
             <div class="modal-footer">
               <i class="fa fa-check fa-lg text-success update-message" id="update-message-{{ facility_app.id }}"></i>
-              <button type="button" class="btn btn-primary btn-save"><i class="fa fa-save"></i> Save</button>
+              <button data-action="UPDATE" type="button" class="btn btn-primary btn-action"><i class="fa fa-save"></i> Save</button>
               {% if facility_app.status == 'PEN' %}
-                <button type="button" class="btn btn-success"><i class="fa fa-send"></i> Save & Apply</button>
+                <button data-action="APPLY" type="button" class="btn btn-success btn-action"><i class="fa fa-send"></i> Apply</button>
               {% endif %}
-              <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+              {% if facility_app.status == 'APP' %}
+                <button data-action="WITHDRAW" type="button" class="btn btn-secondary btn-action"><i class="fa fa-reply-all"></i> Withdraw</button>
+              {% endif %}
               {% if facility_app.status == 'PEN' or facility_app.status == 'CLO' %}
-                <button type="button" class="btn btn-danger btn-delete"><i class="fa fa-times"></i> Delete</button>
+                <button data-action="DELETE" type="button" class="btn btn-danger btn-action"><i class="fa fa-times"></i> Delete</button>
               {% endif %}
             </div>
           </form>

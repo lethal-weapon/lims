@@ -7,21 +7,26 @@ from applications.models import FacilityApplication
 from .models import Apparatus, Facility, Laboratory
 
 
-# Only authenticated and verified users can view the inventory
-@login_required(login_url=reverse_lazy('login'))
-def warehouse(request):
-    # Find out what facilities are unavailable
+# Find out what facilities are unavailable
+def get_occupied_facilities():
     fapps = FacilityApplication.objects.filter(status__in=['WAI', 'BOR', 'OVE'])
-    in_use_facility_ids = set()
+    facilities = set()
 
     for fapp in fapps:
         for f in fapp.items.all():
-            in_use_facility_ids.add(f.id)
+            facilities.add(f)
 
+    return facilities
+
+
+# Only authenticated and verified users can view the inventory
+@login_required(login_url=reverse_lazy('login'))
+def warehouse(request):
+    occupied_ids = set([f.id for f in get_occupied_facilities()])
     return render(request, 'inventory/warehouse.html', {
-        'facility_list'            : Facility.objects.exclude(id__in=in_use_facility_ids),
-        'apparatus_list'           : Apparatus.objects.exclude(id__in=in_use_facility_ids),
-        'laboratory_list'          : Laboratory.objects.exclude(id__in=in_use_facility_ids),
+        'facility_list'            : Facility.objects.exclude(id__in=occupied_ids),
+        'apparatus_list'           : Apparatus.objects.exclude(id__in=occupied_ids),
+        'laboratory_list'          : Laboratory.objects.exclude(id__in=occupied_ids),
         'facility_application_list': FacilityApplication.objects.filter(
             applicant=request.user
         ).filter(

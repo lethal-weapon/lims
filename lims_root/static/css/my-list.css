@@ -49,6 +49,6 @@
   border-radius:30px;
 }
 
-.update-message {
+.update-message, .apply-message {
   display:none;
 }

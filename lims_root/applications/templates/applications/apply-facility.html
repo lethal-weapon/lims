@@ -6,7 +6,7 @@
 {% endblock title %}
 
 {% block application-content %}
-  <form method="post" action="{% url 'apply-facility' %}" class="apply-form">
+  <form method="post" action="{% url 'create-facility-application' %}" class="apply-form">
     {% csrf_token %}
 
     <div class="form-group">

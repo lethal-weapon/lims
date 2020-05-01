@@ -5,7 +5,9 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
+from accounts.models import Account
 from inventory.models import Apparatus, Facility, Laboratory
+from inventory.views import get_occupied_facilities
 from .forms import FacilityApplicationForm
 from .models import FacilityApplication, ResearchApplication
 
@@ -29,11 +31,12 @@ def my_list(request):
         'facility_application_list': fal,
         'research_application_list': ral,
         'context'                  : context,
+        'user_quota'               : get_user_quota(request.user),
     })
 
 
 @login_required(login_url=reverse_lazy('login'))
-def apply_facility(request):
+def create_facility_application(request):
     if request.method == 'GET':
         return render(request, 'applications/apply-facility.html')
 
@@ -57,14 +60,94 @@ def apply_facility(request):
         })
 
 
-@login_required(login_url=reverse_lazy('login'))
-def apply_research(request):
-    return render(request, 'applications/apply-research.html', {
-    })
+def get_user_quota(user):
+    fal = FacilityApplication.objects.filter(applicant=user).filter(
+        status__in=['APP', 'WAI', 'BOR', 'OVE'])
+    borrow_limit = Account.objects.get(id=user.id).limit
+    current_count = sum([fa.items.count() for fa in fal])
+
+    return borrow_limit - current_count
 
 
 @login_required(login_url=reverse_lazy('login'))
-def update_facility_application(request):
+def ajax_fa_switcher(request):
+    action = request.GET.get('action')
+
+    if action == 'APPLY':
+        return apply_fa(request)
+    elif action == 'UPDATE':
+        return update_fa(request)
+    elif action == 'WITHDRAW':
+        return withdraw_fa(request)
+    elif action == 'DELETE':
+        return delete_fa(request)
+
+
+def apply_fa(request):
+    replies = {
+        'message'   : '',
+        'is_success': False,
+        'id'        : request.GET.get('id'),
+    }
+    fa = FacilityApplication.objects.get(id=request.GET.get('id'))
+    item_count = fa.items.count()
+    quota = get_user_quota(request.user)
+    occupied_facilities = get_occupied_facilities()
+    apparatus_ids = set([a.id for a in Apparatus.objects.all()])
+
+    if item_count < 1:
+        replies['message'] = 'Apply for WHAT exactly?'
+
+    elif item_count > quota:
+        replies['message'] = 'You can only apply additional ' + str(quota) + ' facilities!'
+
+    elif item_count == 1:
+        if fa.items.first() in occupied_facilities:
+            replies['message'] = 'This facility is unavailable right now'
+        else:
+            replies['is_success'] = True
+
+    else:
+        # Facilities that are managed by different
+        # staffs can't be applied together
+        management, unavailable = {}, []
+        for f in fa.items.all():
+            if f in occupied_facilities:
+                unavailable.append(f)
+
+            if f.staff in management.keys():
+                management[f.staff].append(f)
+            else:
+                management[f.staff] = [f]
+
+        for f in unavailable:
+            if f.id in apparatus_ids:
+                replies['message'] += str(Apparatus.objects.get(id=f.id))
+            else:
+                replies['message'] += str(Laboratory.objects.get(id=f.id))
+            replies['message'] += ' is unavailable!\n'
+
+        if len(management) > 1:
+            for lst in management.values():
+                replies['message'] += '['
+                for f in lst:
+                    if f.id in apparatus_ids:
+                        replies['message'] += str(Apparatus.objects.get(id=f.id)) + ', '
+                    else:
+                        replies['message'] += str(Laboratory.objects.get(id=f.id)) + ', '
+                replies['message'] += '] // '
+            replies['message'] += ' need to be applied separately!'
+
+        if len(unavailable) == 0 and len(management) == 1:
+            replies['is_success'] = True
+
+    if replies['is_success']:
+        fa.status = 'APP'
+        fa.save()
+    return JsonResponse(replies)
+
+
+def update_fa(request):
     data = request.GET
     fa = FacilityApplication.objects.get(id=data.get('id'))
 
@@ -82,11 +165,18 @@ def update_facility_application(request):
             fa.reason = reason
 
     fa.save()
-    return JsonResponse({'id': fa.id, 'message': 'Updated'})
+    return JsonResponse({'id': fa.id, 'is_success': True})
 
 
-@login_required(login_url=reverse_lazy('login'))
-def delete_facility_application(request):
+def withdraw_fa(request):
+    fa = FacilityApplication.objects.get(id=request.GET.get('id'))
+    fa.status = 'PEN'
+    fa.save()
+
+    return JsonResponse({'is_success': True})
+
+
+def delete_fa(request):
     FacilityApplication.objects.get(id=request.GET.get('id')).delete()
 
     return JsonResponse({'is_success': True})
@@ -106,3 +196,9 @@ def remove_facility_from_list(request):
             return JsonResponse({'is_success': True})
 
     return JsonResponse({'is_success': False})
+
+
+@login_required(login_url=reverse_lazy('login'))
+def create_research_application(request):
+    return render(request, 'applications/apply-research.html', {
+    })
