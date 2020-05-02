@@ -36,9 +36,9 @@ def my_list(request):
 
 
 @login_required(login_url=reverse_lazy('login'))
-def create_facility_application(request):
+def create_fa(request, template_name='applications/apply-facility.html'):
     if request.method == 'GET':
-        return render(request, 'applications/apply-facility.html')
+        return render(request, template_name)
 
     elif request.method == 'POST':
         form = FacilityApplicationForm(request.POST)
@@ -49,15 +49,21 @@ def create_facility_application(request):
             except Exception:
                 pass
             app.save()
-            return render(request, 'applications/apply-facility.html', {
+            return render(request, template_name, {
                 'apply_message': 'Application Added',
                 'is_success'   : True,
             })
 
-        return render(request, 'applications/apply-facility.html', {
+        return render(request, template_name, {
             'apply_message': 'Please Fill Fields with Reasonable Input',
             'is_success'   : False,
         })
+
+
+@login_required(login_url=reverse_lazy('login'))
+def create_ra(request, template_name='applications/apply-research.html'):
+    return render(request, template_name, {
+    })
 
 
 def get_user_quota(user):
@@ -142,6 +148,7 @@ def apply_fa(request):
             replies['is_success'] = True
 
     if replies['is_success']:
+        fa.applied_at = datetime.today()
         fa.status = 'APP'
         fa.save()
     return JsonResponse(replies)
@@ -170,6 +177,7 @@ def update_fa(request):
 
 def withdraw_fa(request):
     fa = FacilityApplication.objects.get(id=request.GET.get('id'))
+    fa.applied_at = None
     fa.status = 'PEN'
     fa.save()
 
@@ -196,9 +204,3 @@ def remove_facility_from_list(request):
             return JsonResponse({'is_success': True})
 
     return JsonResponse({'is_success': False})
-
-
-@login_required(login_url=reverse_lazy('login'))
-def create_research_application(request):
-    return render(request, 'applications/apply-research.html', {
-    })

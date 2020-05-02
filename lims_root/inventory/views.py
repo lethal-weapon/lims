@@ -21,9 +21,10 @@ def get_occupied_facilities():
 
 # Only authenticated and verified users can view the inventory
 @login_required(login_url=reverse_lazy('login'))
-def warehouse(request):
+def warehouse(request, template_name='inventory/warehouse.html'):
+
     occupied_ids = set([f.id for f in get_occupied_facilities()])
-    return render(request, 'inventory/warehouse.html', {
+    return render(request, template_name, {
         'facility_list'            : Facility.objects.exclude(id__in=occupied_ids),
         'apparatus_list'           : Apparatus.objects.exclude(id__in=occupied_ids),
         'laboratory_list'          : Laboratory.objects.exclude(id__in=occupied_ids),

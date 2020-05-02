@@ -30,7 +30,7 @@ def user_forgot(request):
     return redirect('/')
 
 
-def user_login(request):
+def user_login(request, template_name='accounts/login.html'):
     bulletin_url = reverse_lazy('site-bulletin')
     if request.user.is_authenticated:
         return redirect(bulletin_url)
@@ -45,7 +45,7 @@ def user_login(request):
                 login(request, user)
                 return redirect(bulletin_url)
 
-    return render(request, 'accounts/login.html', {'login_form': form})
+    return render(request, template_name, {'login_form': form})
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -54,7 +54,7 @@ def user_logout(request):
     return redirect('/')
 
 
-def user_register(request):
+def user_register(request, template_name='accounts/register.html'):
     form = RegistrationForm()
 
     if request.method == 'POST':
@@ -68,5 +68,4 @@ def user_register(request):
             login(request, account)
             return redirect(reverse_lazy('register-success'))
 
-    return render(request, 'accounts/register.html',
-                  {'registration_form': form})
+    return render(request, template_name, {'registration_form': form})

@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
-
 SCHOOL_CHOICES = (
     ('CS', 'Computer Science'),
     ('CE', 'Communication Engineering'),
@@ -71,8 +70,28 @@ class Account(AbstractBaseUser):
     # Returns True if the user has the named permission.
     # If obj is provided, the permission needs to be
     # checked against a specific object instance.
+    # app.view/add/change/delete_model
     def has_perm(self, perm, obj=None):
-        return self.is_staff
+        if self.role == 'SUP':
+            return True
+
+        elif self.role == 'ADM':
+            if perm == 'accounts.delete_account':
+                return False
+            return True
+
+        elif self.role == 'STA':
+            if perm == 'bulletin.delete_article' or \
+                perm == 'bulletin.delete_facilityschedule' or \
+                perm == 'inventory.delete_apparatus' or \
+                perm == 'inventory.delete_laboratory' or \
+                perm == 'applications.delete_facilityapplication' or \
+                perm == 'applications.delete_researchapplication':
+                return False
+
+            return True
+
+        return False
 
     # Returns True if the user has permission to
     # access models in the given app.
