@@ -9,6 +9,7 @@ class ApparatusAdmin(admin.ModelAdmin):
     ordering = ('name',)
     search_fields = ('name', 'model_no',)
     exclude = ('staff',)
+    list_per_page = 50
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
@@ -31,6 +32,7 @@ class ApparatusAdmin(admin.ModelAdmin):
 class LaboratoryAdmin(ApparatusAdmin):
     list_display = ('name', 'location', 'capacity', 'school', 'staff',)
     search_fields = ('name', 'location',)
+    list_per_page = 25
 
 
 admin.site.register(Apparatus, ApparatusAdmin)

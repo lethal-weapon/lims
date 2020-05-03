@@ -9,27 +9,8 @@ class ApplicationAdmin(admin.ModelAdmin):
     ordering = ('applied_at', 'start',)
     search_fields = ('applicant',)
     readonly_fields = ('applied_at', 'created_at', 'reason', 'applicant',)
-    actions = ('approve_application', 'decline_application',
-               'miss_facility_schedule', 'mark_overtime',
-               'mark_facility_taken', 'mark_facility_return',)
-    fieldsets = (
-        ('Basics', {
-            'fields': ('applied_at', 'start', 'end', 'status',)
-        }),
-        ('Details', {
-            'fields': ('reason', 'reply',)
-        }),
-        ('Applications', {
-            'fields': ('applicant', 'items',)
-        }),
-    )
-
-    def has_change_permission(self, request, obj=None):
-        if obj:
-            for item in obj.items.all():
-                if item.staff == request.user:
-                    return True
-        return False
+    list_per_page = 10
+    date_hierarchy = 'start'
 
     def has_delete_permission(self, request, obj=None):
         if obj and obj.applicant == request.user:
@@ -61,8 +42,46 @@ class ApplicationAdmin(admin.ModelAdmin):
         queryset.update(status='CLO')
 
 
+class FacilityApplicationAdmin(ApplicationAdmin):
+    list_display = ('applied_at', 'start', 'end',
+                    'status', 'applicant', 'items_display',)
+    actions = ('approve_application', 'decline_application',
+               'miss_facility_schedule', 'mark_overtime',
+               'mark_facility_taken', 'mark_facility_return',)
+    fieldsets = (
+        ('Basics', {
+            'fields': ('applied_at', 'start', 'end', 'status',)
+        }),
+        ('Details', {
+            'fields': ('reason', 'reply',)
+        }),
+        ('Applications', {
+            'fields': ('applicant', 'items',)
+        }),
+    )
+
+    def items_display(self, obj):
+        return ", ".join([
+            item.name for item in obj.items.all()
+        ])
+
+    items_display.short_description = "Items"
+
+    # each staff should only manage those facility applications
+    # whose applied items are managed by staff himself/herself
+    def has_change_permission(self, request, obj=None):
+        if obj:
+            for item in obj.items.all():
+                if item.staff == request.user:
+                    return True
+        return False
+
+
 class ResearchApplicationAdmin(ApplicationAdmin):
     search_fields = ('title', 'applicant', 'members',)
+    readonly_fields = ('applied_at', 'created_at', 'reason',
+                       'applicant', 'members', 'title',)
+    actions = ('approve_application', 'decline_application', 'mark_overtime',)
     fieldsets = (
         ('Basics', {
             'fields': ('applied_at', 'start', 'end', 'status',)
@@ -75,12 +94,16 @@ class ResearchApplicationAdmin(ApplicationAdmin):
         }),
     )
 
+    # each staff should only manage those research applications
+    # that submitted by the people who come from his/her school
     def has_change_permission(self, request, obj=None):
-        return True
+        if obj and obj.applicant.school == request.user.school:
+            return True
+        return False
 
     def approve_application(self, request, queryset):
         queryset.update(status='ONG')
 
 
-admin.site.register(FacilityApplication, ApplicationAdmin)
+admin.site.register(FacilityApplication, FacilityApplicationAdmin)
 admin.site.register(ResearchApplication, ResearchApplicationAdmin)

@@ -9,6 +9,8 @@ class ArticleAdmin(admin.ModelAdmin):
     ordering = ('-published',)
     search_fields = ('subject', 'content',)
     exclude = ('author',)
+    list_per_page = 15
+    date_hierarchy = 'published'
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
@@ -34,6 +36,8 @@ class FacilityScheduleAdmin(admin.ModelAdmin):
     ordering = ('-day',)
     search_fields = ('site',)
     exclude = ('creator',)
+    list_per_page = 25
+    date_hierarchy = 'day'
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:

@@ -9,7 +9,7 @@ class Facility(models.Model):
     school = models.CharField(max_length=4, choices=SCHOOL_CHOICES, default='TBD')
 
     def __str__(self):
-        return str(self.id)
+        return str(self.name)
 
 
 class Apparatus(Facility):
