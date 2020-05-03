@@ -5,6 +5,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
 
 from .models import Account
+from .mixin import ExportCsvMixin
 
 
 # A form for creating users
@@ -53,7 +54,7 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-class AccountAdmin(UserAdmin):
+class AccountAdmin(UserAdmin, ExportCsvMixin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
@@ -65,6 +66,7 @@ class AccountAdmin(UserAdmin):
     search_fields = ('campus_id', 'name', 'email',)
     readonly_fields = ('last_login', 'date_joined',)
     ordering = ('campus_id',)
+    actions = ('export_as_csv',)
     filter_horizontal = ()
 
     # The fields to be used in displaying the User model.

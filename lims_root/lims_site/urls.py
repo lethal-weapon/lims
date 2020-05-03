@@ -28,3 +28,8 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
 
 ]
+
+# Django Admin Settings
+admin.site.site_header = "LIMS Admin"
+admin.site.site_title = "LIMS Admin Portal"
+admin.site.index_title = "Welcome to LIMS"

@@ -17,6 +17,9 @@ class Apparatus(Facility):
     model_no = models.CharField(max_length=50)
     purchased = models.DateField()
 
+    class Meta:
+        verbose_name_plural = 'Apparatuses'
+
     def __str__(self):
         return str(self.name + ' - ' + self.model_no)
 
@@ -24,6 +27,9 @@ class Apparatus(Facility):
 class Laboratory(Facility):
     location = models.CharField(max_length=50, unique=True)
     capacity = models.IntegerField(default=5)
+
+    class Meta:
+        verbose_name_plural = 'Laboratories'
 
     def __str__(self):
         return str('Lab - ' + self.location)

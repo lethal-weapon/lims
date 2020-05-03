@@ -19,6 +19,7 @@ class FacilitySchedule(models.Model):
     day = models.DateField()
     start = models.TimeField()
     end = models.TimeField()
+    creator = models.ForeignKey(Account, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return str(self.id)

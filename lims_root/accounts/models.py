@@ -81,14 +81,6 @@ class Account(AbstractBaseUser):
             return True
 
         elif self.role == 'STA':
-            if perm == 'bulletin.delete_article' or \
-                perm == 'bulletin.delete_facilityschedule' or \
-                perm == 'inventory.delete_apparatus' or \
-                perm == 'inventory.delete_laboratory' or \
-                perm == 'applications.delete_facilityapplication' or \
-                perm == 'applications.delete_researchapplication':
-                return False
-
             return True
 
         return False
