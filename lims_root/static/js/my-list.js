@@ -35,7 +35,7 @@ function ajaxFA(action, form) {
             window.location.replace(window.location.href);
           } else {
             let selector = '#apply-message-' + data['id'];
-            $(selector + ' > span').text(data['message']);
+            $(selector + ' > span').html(data['message'].replace(/\/\//g, '<br\/>'));
             $(selector).fadeIn(1000);
           }
           break;

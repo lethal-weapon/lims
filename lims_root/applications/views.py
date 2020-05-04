@@ -131,7 +131,7 @@ def apply_fa(request):
                 replies['message'] += str(Apparatus.objects.get(id=f.id))
             else:
                 replies['message'] += str(Laboratory.objects.get(id=f.id))
-            replies['message'] += ' is unavailable!\n'
+            replies['message'] += ' is unavailable! //'
 
         if len(management) > 1:
             for lst in management.values():
