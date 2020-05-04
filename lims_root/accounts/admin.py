@@ -4,8 +4,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
 
-from .models import Account
 from .mixin import ExportCsvMixin
+from .models import Account
 
 
 # A form for creating users
@@ -62,11 +62,11 @@ class AccountAdmin(UserAdmin, ExportCsvMixin):
     list_display = ('campus_id', 'name', 'school',
                     'email', 'role', 'is_verified',)
     list_filter = ('is_verified', 'school', 'role',)
-
     search_fields = ('campus_id', 'name', 'email',)
     readonly_fields = ('last_login', 'date_joined',)
     ordering = ('campus_id',)
-    actions = ('export_as_csv',)
+    actions = ('export_as_csv', 'mark_verified_student',
+               'mark_verified_teacher', 'mark_outdated_user',)
     filter_horizontal = ()
 
     # The fields to be used in displaying the User model.
@@ -96,9 +96,18 @@ class AccountAdmin(UserAdmin, ExportCsvMixin):
         }),
     )
 
+    # Additional actions for admins
+    def mark_verified_student(self, request, queryset):
+        queryset.update(role='STU', limit=3, is_verified=True)
+
+    def mark_verified_teacher(self, request, queryset):
+        queryset.update(role='TEA', limit=5, is_verified=True)
+
+    def mark_outdated_user(self, request, queryset):
+        queryset.update(is_active=False, is_verified=False)
+
 
 admin.site.register(Account, AccountAdmin)
-
-# ... and, since we're not using Django's built-in permissions,
+# since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)

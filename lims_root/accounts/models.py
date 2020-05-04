@@ -53,7 +53,7 @@ class Account(AbstractBaseUser):
 
     name = models.CharField(max_length=50, unique=False, blank=True, null=True)
     school = models.CharField(max_length=4, choices=SCHOOL_CHOICES, blank=True, null=True)
-    limit = models.IntegerField(default=1, verbose_name='Facility Borrow Limit')
+    limit = models.IntegerField(default=0, verbose_name='Facility Borrow Limit')
 
     role = models.CharField(max_length=3, choices=ROLE_CHOICES, default='VIS')
     is_active = models.BooleanField(default=True)
@@ -72,18 +72,7 @@ class Account(AbstractBaseUser):
     # checked against a specific object instance.
     # app.view/add/change/delete_model
     def has_perm(self, perm, obj=None):
-        if self.role == 'SUP':
-            return True
-
-        elif self.role == 'ADM':
-            if perm == 'accounts.delete_account':
-                return False
-            return True
-
-        elif self.role == 'STA':
-            return True
-
-        return False
+        return self.is_staff
 
     # Returns True if the user has permission to
     # access models in the given app.

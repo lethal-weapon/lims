@@ -6,9 +6,7 @@ from .models import FacilityApplication, ResearchApplication
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('applied_at', 'start', 'end', 'status', 'applicant',)
     list_filter = ('status',)
-    ordering = ('applied_at', 'start',)
-    search_fields = ('applicant',)
-    readonly_fields = ('applied_at', 'created_at', 'reason', 'applicant',)
+    ordering = ('-applied_at', 'start',)
     list_per_page = 10
     date_hierarchy = 'start'
 
@@ -17,34 +15,47 @@ class ApplicationAdmin(admin.ModelAdmin):
             return True
         return False
 
+    # Only set applicant field during the first save.
+    # This is not intended for workers to create an application
     def save_model(self, request, obj, form, change):
         if not obj.pk:
-            # Only set applicant during the first save.
             obj.applicant = request.user
         super().save_model(request, obj, form, change)
 
+    # Additional actions for workers
     def approve_application(self, request, queryset):
         queryset.update(status='WAI')
+        queryset.update(reply='Your application has been approved.')
 
     def decline_application(self, request, queryset):
         queryset.update(status='CLO')
+        queryset.update(reply='Your application has been declined.')
 
     def miss_facility_schedule(self, request, queryset):
         queryset.update(status='CLO')
+        queryset.update(reply='You missed the schedule! '
+                              'You have to apply it again if you still want it.')
 
     def mark_overtime(self, request, queryset):
         queryset.update(status='OVE')
+        queryset.update(reply='Your application has exceeded the promised time! '
+                              'FIRST WARNING!')
 
     def mark_facility_taken(self, request, queryset):
         queryset.update(status='BOR')
+        queryset.update(reply='You has borrowed the facilities successfully. '
+                              'Have fun with that!')
 
     def mark_facility_return(self, request, queryset):
         queryset.update(status='CLO')
+        queryset.update(reply='You has returned the facilities. Thank you!')
 
 
 class FacilityApplicationAdmin(ApplicationAdmin):
     list_display = ('applied_at', 'start', 'end',
                     'status', 'applicant', 'items_display',)
+    readonly_fields = ('applied_at', 'created_at', 'reason',
+                       'applicant', 'items',)
     actions = ('approve_application', 'decline_application',
                'miss_facility_schedule', 'mark_overtime',
                'mark_facility_taken', 'mark_facility_return',)
@@ -78,7 +89,7 @@ class FacilityApplicationAdmin(ApplicationAdmin):
 
 
 class ResearchApplicationAdmin(ApplicationAdmin):
-    search_fields = ('title', 'applicant', 'members',)
+    search_fields = ('title',)
     readonly_fields = ('applied_at', 'created_at', 'reason',
                        'applicant', 'members', 'title',)
     actions = ('approve_application', 'decline_application', 'mark_overtime',)
@@ -95,7 +106,7 @@ class ResearchApplicationAdmin(ApplicationAdmin):
     )
 
     # each staff should only manage those research applications
-    # that submitted by the people who come from his/her school
+    # that submitted by the people who come from his/her own school
     def has_change_permission(self, request, obj=None):
         if obj and obj.applicant.school == request.user.school:
             return True
@@ -103,6 +114,7 @@ class ResearchApplicationAdmin(ApplicationAdmin):
 
     def approve_application(self, request, queryset):
         queryset.update(status='ONG')
+        queryset.update(reply='Your research has been approved. Good Luck!')
 
 
 admin.site.register(FacilityApplication, FacilityApplicationAdmin)

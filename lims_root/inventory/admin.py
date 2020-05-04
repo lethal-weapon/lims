@@ -3,17 +3,13 @@ from django.contrib import admin
 from .models import Apparatus, Laboratory
 
 
-class ApparatusAdmin(admin.ModelAdmin):
-    list_display = ('name', 'model_no', 'cost', 'purchased', 'school', 'staff',)
+class FacilityAdmin(admin.ModelAdmin):
     list_filter = ('school',)
-    ordering = ('name',)
-    search_fields = ('name', 'model_no',)
     exclude = ('staff',)
-    list_per_page = 50
 
+    # Only set staff field during the first save.
     def save_model(self, request, obj, form, change):
         if not obj.pk:
-            # Only set author during the first save.
             obj.staff = request.user
         super().save_model(request, obj, form, change)
 
@@ -29,8 +25,17 @@ class ApparatusAdmin(admin.ModelAdmin):
         return False
 
 
-class LaboratoryAdmin(ApparatusAdmin):
+class ApparatusAdmin(FacilityAdmin):
+    list_display = ('name', 'model_no', 'cost', 'purchased', 'school', 'staff',)
+    ordering = ('name', 'model_no',)
+    search_fields = ('name', 'model_no',)
+    date_hierarchy = 'purchased'
+    list_per_page = 50
+
+
+class LaboratoryAdmin(FacilityAdmin):
     list_display = ('name', 'location', 'capacity', 'school', 'staff',)
+    ordering = ('school', 'location',)
     search_fields = ('name', 'location',)
     list_per_page = 25
 
