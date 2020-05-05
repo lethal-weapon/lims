@@ -1,5 +1,6 @@
 from django.urls import path
 from django.views.generic.base import TemplateView
+from django.contrib.auth import views as auth_views
 
 from . import views
 
@@ -14,4 +15,10 @@ urlpatterns = [
 
     path('ajax-update-email/', views.update_email,
          name='ajax-update-email'),
+
+    # Password reset links (ref: https://github.com/django/django/blob/master/django/contrib/auth/views.py)
+    path('password_change/', auth_views.PasswordChangeView.as_view(),
+         name='password_change'),
+    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(),
+         name='password_change_done'),
 ]
