@@ -37,40 +37,6 @@
   color:lightgray;
 }
 
-#profile-modal-title {
-  font-style:italic;
-}
-
-#logout-modal {
-  background-color:black;
-}
-
-.modal-table tr {
-  background-color:rgba(216, 226, 229, 0.6);
-}
-
-.modal-table tr:hover {
-  background-color:#fff9e0;
-}
-
-.modal-table td {
-  padding:4px 15px;
-  vertical-align:middle;
-  border-width:1px 1px 0;
-  border-style:solid;
-  border-color:#dbdbdb;
-  text-align:left;
-}
-
-.modal-table .cell-title {
-  min-width:160px;
-  font-style:italic;
-}
-
-.modal-table .cell-value {
-  white-space:nowrap;
-}
-
 .alert-position {
   width:50%;
   margin-left:25%;
@@ -79,6 +45,51 @@
   text-align:center;
 }
 
+#logout-modal {
+  background-color:black;
+}
+
 #home-placeholder {
   margin:10rem auto;
+}
+
+.tab-content .container {
+  width:80%;
+  padding-top:2rem;
+}
+
+.tab-content .container form {
+  width:80%;
+  margin:1rem auto;
+}
+
+.modal-table {
+  border-radius:20px;
+  background-color:rgba(216, 226, 229, 0.6);
+}
+
+.modal-table td {
+  padding:0.25rem 1rem;
+  text-align:left;
+}
+
+.modal-table tr:hover {
+  background-color:#fff9e0;
+}
+
+.modal-table td:hover {
+  cursor:default;
+}
+
+.modal-table .cell-title {
+  font-weight:bolder;
+  font-style:italic;
+}
+
+.modal-table .cell-value {
+  padding-right:2rem;
+}
+
+#email-update-message {
+  display:none;
 }

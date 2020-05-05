@@ -36,8 +36,8 @@ class AccountUpdateForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            account = Account.objects\
-                .exclude(pk=self.instance.pk)\
+            account = Account.objects \
+                .exclude(pk=self.instance.pk) \
                 .get(email__iexact=email)
         except Account.DoesNotExist:
             return email

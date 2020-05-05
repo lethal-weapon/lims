@@ -6,6 +6,11 @@
 $(function () {
   updateGreeting();
   setClassForLinks();
+
+  $('#update-email-form').on('submit', function (e) {
+    e.preventDefault();
+    updateEmailAddress($(this));
+  });
 });
 
 // Update the greeting according to current time
@@ -33,10 +38,37 @@ function setClassForLinks() {
   let currentURL = window.location.href;
   $(selector).each(function () {
     let currentLink = $(this).attr('href').toString();
-    let linkPrefix = currentLink.split("/")[1];
+    let linkPrefix = currentLink.split('/')[1];
 
     if (currentURL.indexOf(linkPrefix) >= 0) {
       $(this).addClass('current');
+    }
+  });
+}
+
+// Update email address
+function updateEmailAddress(form) {
+  $.ajax({
+    url: $(form).attr('action'),
+    data: $(form).serialize(),
+    timeout: 2000,
+    dataType: 'json',
+
+    success: function (data) {
+      let selector = '#email-update-message';
+      $(selector + ' > span').text(data['message']);
+
+      if (data['is_success']) {
+        $(selector).switchClass('text-danger', 'text-success');
+        $(selector + ' > i').switchClass('fa-exclamation-circle', 'fa-check');
+        $('#table-email').text($('#form-email').val());
+      } else {
+        $(selector).switchClass('text-success', 'text-danger');
+        $(selector + ' > i').switchClass('fa-check', 'fa-exclamation-circle');
+      }
+
+      $(selector).fadeIn(1000);
+      $(selector).fadeOut(5000);
     }
   });
 }

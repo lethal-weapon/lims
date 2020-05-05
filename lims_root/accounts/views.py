@@ -1,29 +1,43 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from .forms import AccountAuthenticationForm, AccountUpdateForm, RegistrationForm
+from .forms import AccountAuthenticationForm, RegistrationForm
+from .models import Account
 
 
-# Update account info
 @login_required(login_url=reverse_lazy('login'))
-def user_home(request):
-    if request.method == 'GET':
-        return redirect(reverse_lazy('site-bulletin'))
+def update_email(request):
+    email = request.GET.get('email')
+    replies = {
+        'message'   : '',
+        'is_success': False,
+    }
 
-    elif request.method == 'POST':
-        context = {}
-        form = AccountUpdateForm(request.POST, instance=request.user)
+    try:
+        account = Account.objects \
+            .exclude(id=request.user.id) \
+            .get(email__iexact=email)
+    except Account.DoesNotExist:
+        # nobody is using this email
+        user_account = Account.objects.get(id=request.user.id)
+        user_account.email = email
+        user_account.save()
+        replies['message'] = 'Email Updated'
+        replies['is_success'] = True
+    else:
+        # somebody is using this email
+        replies['message'] = 'Email "%s" is already in use.' % email
+    finally:
+        return JsonResponse(replies)
 
-        if form.is_valid():
-            form.initial = {"email": request.POST['email']}
-            form.save()
-            context['account_update_message'] = 'Email Updated'
-        else:
-            context['account_update_message'] = 'This Email is Unavailable'
 
-        return render(request, 'accounts/home.html', context)
+@login_required(login_url=reverse_lazy('login'))
+def user_logout(request):
+    logout(request)
+    return redirect('/')
 
 
 def user_forgot(request):
@@ -46,12 +60,6 @@ def user_login(request, template_name='accounts/login.html'):
                 return redirect(bulletin_url)
 
     return render(request, template_name, {'login_form': form})
-
-
-@login_required(login_url=reverse_lazy('login'))
-def user_logout(request):
-    logout(request)
-    return redirect('/')
 
 
 def user_register(request, template_name='accounts/register.html'):
