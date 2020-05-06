@@ -10,48 +10,53 @@
 {% endblock extra-applications-style %}
 
 {% block application-content %}
-  <div class="list-wrapper">
-    <h3 class="list-title">Facility Applications</h3>
-    <hr/>
-    <table class="table table-striped application-table">
-      <thead>
-        <tr>
-          <th><i class="fa fa-tag"></i> Alias</th>
-          <th><i class="fa fa-calendar-check-o"></i> Start</th>
-          <th><i class="fa fa-calendar-times-o"></i> End</th>
-          <th><i class="fa fa-exclamation-circle"></i> Status</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for facility_app in facility_application_list %}
-        <tr>
-          <td class="cell-link">
-            <a href="#facility-{{ facility_app.id }}-detail-modal"
-               class="hvr-wobble-skew" data-toggle="modal">{{ facility_app.alias }}</a></td>
-          <td>{{ facility_app.start|date:"Y/m/d, D" }}</td>
-          <td>{{ facility_app.end|date:"Y/m/d, D" }}</td>
-          <td>
-            {% if facility_app.status == 'PEN' or facility_app.status == 'CLO' %}
-              <strong class="text-dark">{{ facility_app.get_status_display }}</strong>
-            {% elif facility_app.status == 'ONG' or facility_app.status == 'BOR' %}
-              <strong class="text-success">{{ facility_app.get_status_display }}</strong>
-            {% elif facility_app.status == 'APP' %}
-              <strong class="text-primary">{{ facility_app.get_status_display }}</strong>
-            {% elif facility_app.status == 'WAI' %}
-              <strong class="text-info">{{ facility_app.get_status_display }}</strong>
-            {% else %}
-              <strong class="text-danger">{{ facility_app.get_status_display }}</strong>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <div class="list-divider"></div>
-  <div class="list-wrapper">
-    <h3 class="list-title">Research Applications</h3>
-    <hr/>
+  <ul class="nav nav-tabs row">
+    <li class="nav-item col-6 tab-title"><a href="#application-facility" data-toggle="tab" class="nav-link active">Facility<br/>Applications</a></li>
+    <li class="nav-item col-6 tab-title"><a href="#application-research" data-toggle="tab" class="nav-link">Research<br/>Applications</a></li>
+  </ul>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="application-facility">
+      <div class="container application-table-wrapper">
+        <table class="table table-striped application-table">
+          <thead>
+            <tr>
+              <th><i class="fa fa-tag"></i> Alias</th>
+              <th><i class="fa fa-exclamation-circle"></i> Status</th>
+              <th><i class="fa fa-calendar-check-o"></i> Start</th>
+              <th><i class="fa fa-calendar-times-o"></i> End</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for facility_app in facility_application_list %}
+            <tr>
+              <td class="cell-link">
+                <a href="#facility-{{ facility_app.id }}-detail-modal"
+                   class="hvr-wobble-skew" data-toggle="modal">{{ facility_app.alias }}</a></td>
+              <td>
+                {% if facility_app.status == 'PEN' or facility_app.status == 'CLO' %}
+                  <strong class="text-dark">{{ facility_app.get_status_display }}</strong>
+                {% elif facility_app.status == 'ONG' or facility_app.status == 'BOR' %}
+                  <strong class="text-success">{{ facility_app.get_status_display }}</strong>
+                {% elif facility_app.status == 'APP' %}
+                  <strong class="text-primary">{{ facility_app.get_status_display }}</strong>
+                {% elif facility_app.status == 'WAI' %}
+                  <strong class="text-info">{{ facility_app.get_status_display }}</strong>
+                {% else %}
+                  <strong class="text-danger">{{ facility_app.get_status_display }}</strong>
+                {% endif %}
+              </td>
+              <td>{{ facility_app.start|date:"Y/m/d, D" }}</td>
+              <td>{{ facility_app.end|date:"Y/m/d, D" }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="application-research">
+      <div class="container">
+      </div>
+    </div>
   </div>
 {% endblock application-content %}
 
