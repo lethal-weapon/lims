@@ -66,15 +66,6 @@ def create_ra(request, template_name='applications/apply-research.html'):
     })
 
 
-def get_user_quota(user):
-    fal = FacilityApplication.objects.filter(applicant=user).filter(
-        status__in=['APP', 'WAI', 'BOR', 'OVE'])
-    borrow_limit = Account.objects.get(id=user.id).limit
-    current_count = sum([fa.items.count() for fa in fal])
-
-    return borrow_limit - current_count
-
-
 @login_required(login_url=reverse_lazy('login'))
 def ajax_fa_switcher(request):
     action = request.GET.get('action')
@@ -188,6 +179,15 @@ def delete_fa(request):
     FacilityApplication.objects.get(id=request.GET.get('id')).delete()
 
     return JsonResponse({'is_success': True})
+
+
+def get_user_quota(user):
+    fal = FacilityApplication.objects.filter(applicant=user).filter(
+        status__in=['APP', 'WAI', 'BOR', 'OVE'])
+    borrow_limit = Account.objects.get(id=user.id).limit
+    current_count = sum([fa.items.count() for fa in fal])
+
+    return borrow_limit - current_count
 
 
 # Remove a facility from 'items' field of an

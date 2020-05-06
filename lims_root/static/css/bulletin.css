@@ -1,13 +1,13 @@
 .article-section, .schedule-section {
-  width:75%;
+  width:80%;
   margin:5rem auto;
-  border-radius:10px;
+  padding-top:2rem;
+  border-radius:15px;
   background-color:lightblue;
   opacity:0.8;
 }
 
 .schedule-section {
-  margin-top:0;
   margin-bottom:3rem;
 }
 
@@ -30,12 +30,7 @@
 }
 
 .section-title span {
-  font-size:60%;
-  color:yellow;
-}
-
-.section-title span a {
-  color:white;
+  font-size:70%;
 }
 
 .section-title span a:hover {
@@ -77,12 +72,16 @@
   border-radius:10px;
 }
 
+#schedule-table th {
+  font-family:cursive;
+}
+
 #schedule-table tr:hover {
   background-color:#fff9e0;
 }
 
-#schedule-table th {
-  font-family:cursive;
+#schedule-table td:hover {
+  cursor:default;
 }
 
 #schedule-table td.cell-date, #schedule-table td.cell-time {

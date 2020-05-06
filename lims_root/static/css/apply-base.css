@@ -46,7 +46,8 @@
   padding-top:1rem;
   border-radius:10px;
   border:black thin solid;
-  background-color:whitesmoke;
+  background-color:white;
+  opacity:0.9;
 }
 
 .apply-form {

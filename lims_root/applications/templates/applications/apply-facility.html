@@ -11,22 +11,37 @@
 
     <div class="form-group">
       <label for="alias" class="col-form-label">Application Alias</label>
-      <input type="text" id="alias" name="alias" class="form-control"
-             placeholder="Name Your Application" required autofocus/>
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-tag"></i></span>
+        </div>
+        <input type="text" id="alias" name="alias" class="form-control"
+               placeholder="Name your application" required autofocus/>
+      </div>
     </div>
 
     <div class="form-group">
       <label for="start" class="col-form-label">Borrowing Start Date</label>
-      <input type="date" id="start" name="start" class="form-control" required/>
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-calendar-check-o"></i></span>
+        </div>
+        <input type="date" id="start" name="start" class="form-control" required/>
+      </div>
     </div>
 
     <div class="form-group">
       <label for="end" class="col-form-label">Borrowing End Date</label>
-      <input type="date" id="end" name="end" class="form-control" required/>
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-calendar-times-o"></i></span>
+        </div>
+        <input type="date" id="end" name="end" class="form-control" required/>
+      </div>
     </div>
 
     <div class="form-group">
-      <label for="reason" class="col-form-label">Apply Reason</label>
+      <label for="reason" class="col-form-label">Apply Reason <i class="fa fa-question"></i></label>
       <textarea class="form-control" id="reason" name="reason" required></textarea>
     </div>
 

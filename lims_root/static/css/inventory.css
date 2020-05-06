@@ -34,7 +34,7 @@
 }
 
 .inventory-table tr:hover {
-  background-color:lightyellow;
+  background-color:#fff9e0;
 }
 
 .inventory-table td > a:hover {

@@ -11,19 +11,18 @@
   font-family:cursive;
 }
 
-.cell-link > a {
+.application-table tr:hover {
+  background-color:#fff9e0;
+}
+
+.application-table .cell-link > a {
   color:black;
 }
 
-.cell-link > a:hover {
+.application-table .cell-link > a:hover {
   color:green;
   font-weight:bold;
   text-decoration:none;
-}
-
-.update-form {
-  width:85%;
-  margin:0.5rem auto;
 }
 
 .application-detail-table .cell-title {
@@ -47,6 +46,11 @@
 .facility-summary-wrapper ul li button {
   margin:-7px 20px 15px 0;
   border-radius:30px;
+}
+
+.update-form {
+  width:85%;
+  margin:0.5rem auto;
 }
 
 .update-message, .apply-message {
