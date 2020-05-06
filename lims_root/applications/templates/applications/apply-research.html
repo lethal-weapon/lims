@@ -2,11 +2,56 @@
 {% load static %}
 
 {% block title %}
-  Apply for Research
+  Apply New Research
 {% endblock title %}
 
 {% block application-content %}
-{% endblock application-content %}
+  <form class="create-form"
+        data-action="CREATE"
+        data-ajax-url="{% url 'ajax-app' %}"
+        data-application-type="RESEARCH">
+    {% csrf_token %}
 
-{% block extra-applications-script %}
-{% endblock extra-applications-script %}
+    <div class="form-group">
+      <label for="title" class="col-form-label">Research Title</label>
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-header"></i></span>
+        </div>
+        <input type="text" id="title" name="title" class="form-control"
+               placeholder="Name your research" required autofocus/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="start" class="col-form-label">Research Start Date</label>
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-calendar-check-o"></i></span>
+        </div>
+        <input type="date" id="start" name="start" class="form-control" required/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="end" class="col-form-label">Estimated End Date</label>
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fa fa-calendar-times-o"></i></span>
+        </div>
+        <input type="date" id="end" name="end" class="form-control" required/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="reason" class="col-form-label">Extra Words <i class="fa fa-question"></i></label>
+      <textarea class="form-control" id="reason" name="reason" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-lg btn-primary btn-block">
+        <i class="fa fa-plus"></i> Add to List
+      </button>
+    </div>
+  </form>
+{% endblock application-content %}

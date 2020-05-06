@@ -50,11 +50,17 @@
   opacity:0.9;
 }
 
-.apply-form {
+.create-message {
+  display:none;
+}
+
+/* Style for creating facility/research application pages */
+
+.create-form {
   width:60%;
   margin:2rem auto;
 }
 
-.apply-form label {
+.create-form label {
   font-weight:bold;
 }

@@ -77,7 +77,7 @@
           </div>
 
           <form method="post" class="update-form"
-                data-ajax-url="{% url 'ajax-fa' %}"
+                data-ajax-url="{% url 'ajax-app' %}"
                 data-remove-url="{% url 'remove-facility-from-list' %}"
                 data-facility-app-id="{{ facility_app.id }}">
             {% csrf_token %}

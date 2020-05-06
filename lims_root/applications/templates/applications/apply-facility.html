@@ -6,7 +6,10 @@
 {% endblock title %}
 
 {% block application-content %}
-  <form method="post" action="{% url 'create-facility-application' %}" class="apply-form">
+  <form class="create-form"
+        data-action="CREATE"
+        data-ajax-url="{% url 'ajax-app' %}"
+        data-application-type="FACILITY">
     {% csrf_token %}
 
     <div class="form-group">

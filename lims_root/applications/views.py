@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from accounts.models import Account
 from inventory.models import Apparatus, Facility, Laboratory
 from inventory.views import get_occupied_facilities
-from .forms import FacilityApplicationForm
+from .forms import FacilityApplicationForm, ResearchApplicationForm
 from .models import FacilityApplication, ResearchApplication
 
 
@@ -36,51 +36,43 @@ def my_list(request):
 
 
 @login_required(login_url=reverse_lazy('login'))
-def create_fa(request, template_name='applications/apply-facility.html'):
-    if request.method == 'GET':
-        return render(request, template_name)
-
-    elif request.method == 'POST':
-        form = FacilityApplicationForm(request.POST)
-        if form.is_valid():
-            app = form.save(commit=False)
-            try:
-                app.applicant = request.user
-            except Exception:
-                pass
-            app.save()
-            return render(request, template_name, {
-                'apply_message': 'Application Added',
-                'is_success'   : True,
-            })
-
-        return render(request, template_name, {
-            'apply_message': 'Please Fill Fields with Reasonable Input',
-            'is_success'   : False,
-        })
-
-
-@login_required(login_url=reverse_lazy('login'))
-def create_ra(request, template_name='applications/apply-research.html'):
-    return render(request, template_name, {
-    })
-
-
-@login_required(login_url=reverse_lazy('login'))
-def ajax_fa_switcher(request):
+def ajax_switcher(request):
     action = request.GET.get('action')
 
-    if action == 'APPLY':
-        return apply_fa(request)
+    if action == 'CREATE':
+        return create(request)
+    elif action == 'APPLY':
+        return apply(request)
     elif action == 'UPDATE':
-        return update_fa(request)
+        return update(request)
     elif action == 'WITHDRAW':
-        return withdraw_fa(request)
+        return withdraw(request)
     elif action == 'DELETE':
-        return delete_fa(request)
+        return delete(request)
 
 
-def apply_fa(request):
+def create(request):
+    replies = {
+        'message'   : 'PLEASE CHECK YOUR INPUTS',
+        'is_success': False,
+    }
+
+    if request.GET.get('type') == 'FACILITY':
+        form = FacilityApplicationForm(request.GET)
+    else:
+        form = ResearchApplicationForm(request.GET)
+
+    if form.is_valid():
+        app = form.save(commit=False)
+        app.applicant = request.user
+        app.save()
+        replies['message'] = 'APPLICATION CREATED'
+        replies['is_success'] = True
+
+    return JsonResponse(replies)
+
+
+def apply(request):
     replies = {
         'message'   : '',
         'is_success': False,
@@ -145,7 +137,7 @@ def apply_fa(request):
     return JsonResponse(replies)
 
 
-def update_fa(request):
+def update(request):
     data = request.GET
     fa = FacilityApplication.objects.get(id=data.get('id'))
 
@@ -166,7 +158,7 @@ def update_fa(request):
     return JsonResponse({'id': fa.id, 'is_success': True})
 
 
-def withdraw_fa(request):
+def withdraw(request):
     fa = FacilityApplication.objects.get(id=request.GET.get('id'))
     fa.applied_at = None
     fa.status = 'PEN'
@@ -175,7 +167,7 @@ def withdraw_fa(request):
     return JsonResponse({'is_success': True})
 
 
-def delete_fa(request):
+def delete(request):
     FacilityApplication.objects.get(id=request.GET.get('id')).delete()
 
     return JsonResponse({'is_success': True})

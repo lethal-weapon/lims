@@ -29,20 +29,11 @@
       <section id="apply-base-content">
         <div class="container-fluid">
           <div class="container">
-            {% if apply_message %}
-              {% if is_success %}
-                <div class="alert alert-success text-center">
-                  <strong>{{ apply_message }}</strong>
-                </div>
-              {% else %}
-                <div class="alert alert-danger text-center">
-                  <strong>{{ apply_message }}</strong>
-                </div>
-              {% endif %}
-            {% endif %}
+            <div class="alert alert-success text-center create-message">
+              <strong></strong>
+            </div>
 
-            {% block application-content %}
-            {% endblock application-content %}
+            {% block application-content %} {% endblock application-content %}
           </div>
         </div>
       </section>
