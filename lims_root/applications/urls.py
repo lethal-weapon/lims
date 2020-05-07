@@ -15,4 +15,6 @@ urlpatterns = [
          name='ajax-app'),
     path('ajax-rffl', views.remove_facility_from_list,
          name='remove-facility-from-list'),
+    path('ajax-aatl', views.add_account_to_list,
+         name='add-account-to-list'),
 ]

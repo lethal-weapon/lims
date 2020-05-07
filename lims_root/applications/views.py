@@ -73,6 +73,15 @@ def create(request):
 
 
 def apply(request):
+    # there is no extra condition for applying a research
+    if request.GET.get('type') == 'RESEARCH':
+        ra = ResearchApplication.objects.get(id=request.GET.get('id'))
+        ra.applied_at = datetime.today()
+        ra.status = 'APP'
+        ra.save()
+        return JsonResponse({'is_success': True})
+
+    # it's much complex for the logic of borrowing facility
     replies = {
         'message'   : '',
         'is_success': False,
@@ -139,36 +148,42 @@ def apply(request):
 
 def update(request):
     data = request.GET
-    fa = FacilityApplication.objects.get(id=data.get('id'))
+    app = get_application_by_id(data.get('type'), data.get('id'))
 
-    if len(data.get('alias')) > 0:
-        fa.alias = data.get('alias')
+    if data.get('type') == 'FACILITY':
+        if len(data.get('alias')) > 0:
+            app.alias = data.get('alias')
+    else:
+        if len(data.get('title')) > 0:
+            app.title = data.get('title')
 
-    if fa.status == 'PEN':
+    if app.status == 'PEN':
         start, end, reason = data.get('start'), data.get('end'), data.get('reason')
 
         if len(start) > 0 and start > str(datetime.today().date()):
-            fa.start = start
-        if len(end) > 0 and end > str(datetime.today().date()) and end > str(fa.start):
-            fa.end = end
-        if reason != fa.reason:
-            fa.reason = reason
+            app.start = start
+        if len(end) > 0 and end > str(datetime.today().date()) and end > str(app.start):
+            app.end = end
+        if reason != app.reason:
+            app.reason = reason
 
-    fa.save()
-    return JsonResponse({'id': fa.id, 'is_success': True})
+    app.save()
+    return JsonResponse({'id': app.id, 'is_success': True})
 
 
 def withdraw(request):
-    fa = FacilityApplication.objects.get(id=request.GET.get('id'))
-    fa.applied_at = None
-    fa.status = 'PEN'
-    fa.save()
+    app = get_application_by_id(request.GET.get('type'),
+                                request.GET.get('id'))
+    app.applied_at = None
+    app.status = 'PEN'
+    app.save()
 
     return JsonResponse({'is_success': True})
 
 
 def delete(request):
-    FacilityApplication.objects.get(id=request.GET.get('id')).delete()
+    get_application_by_id(request.GET.get('type'),
+                          request.GET.get('id')).delete()
 
     return JsonResponse({'is_success': True})
 
@@ -182,7 +197,14 @@ def get_user_quota(user):
     return borrow_limit - current_count
 
 
-# Remove a facility from 'items' field of an
+def get_application_by_id(app_type, app_id):
+    if app_type == 'FACILITY':
+        return FacilityApplication.objects.get(id=app_id)
+    else:
+        return ResearchApplication.objects.get(id=app_id)
+
+
+# Remove a facility from 'items' field of an facility
 # application list whose status is PENDING
 @login_required(login_url=reverse_lazy('login'))
 def remove_facility_from_list(request):
@@ -193,6 +215,22 @@ def remove_facility_from_list(request):
         if fa.status == 'PEN' and (f in fa.items.all()):
             fa.items.remove(f)
             fa.save()
+            return JsonResponse({'is_success': True})
+
+    return JsonResponse({'is_success': False})
+
+
+# Add a user to 'members' field of an research
+# application list whose status is PENDING
+@login_required(login_url=reverse_lazy('login'))
+def add_account_to_list(request):
+    a = Account.objects.get(id=request.GET.get('account_id'))
+    ra = ResearchApplication.objects.get(id=request.GET.get('id'))
+
+    if a and ra:
+        if ra.status == 'PEN' and (a not in ra.members.all()):
+            ra.members.add(a)
+            ra.save()
             return JsonResponse({'is_success': True})
 
     return JsonResponse({'is_success': False})

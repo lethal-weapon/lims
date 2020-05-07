@@ -7,7 +7,7 @@ $(function () {
   $('.application-table').DataTable();
 
   $('.btn-action').on('click', function () {
-    ajaxFA($(this).attr('data-action'), $(this).closest('form'));
+    ajaxApplication($(this).attr('data-action'), $(this).closest('form'));
   });
 
   $('.btn-remove').on('click', function () {
@@ -19,11 +19,12 @@ $(function () {
   });
 });
 
-// All bottom buttons' action on fa detail window
-function ajaxFA(action, form) {
+// All bottom buttons' action on application detail window
+function ajaxApplication(action, form) {
   $.ajax({
     url: form.attr('data-ajax-url'),
-    data: form.serialize() + '&action=' + action,
+    data: form.serialize() + '&action=' + action
+      + '&type=' + form.attr('data-application-type'),
     timeout: 2000,
     dataType: 'json',
 
@@ -41,9 +42,11 @@ function ajaxFA(action, form) {
           break;
         }
         case 'UPDATE': {
-          let selector = '#update-message-' + data['id'];
-          $(selector).fadeIn(300);
-          $(selector).fadeOut(3000);
+          if (data['is_success']) {
+            let selector = '#update-message-' + data['id'];
+            $(selector).fadeIn(300);
+            $(selector).fadeOut(3000);
+          }
           break;
         }
         case 'WITHDRAW':

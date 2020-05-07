@@ -11,27 +11,29 @@
 
 {% block application-content %}
   <ul class="nav nav-tabs row">
-    <li class="nav-item col-6 tab-title"><a href="#application-facility" data-toggle="tab" class="nav-link active">Facility<br/>Applications</a></li>
-    <li class="nav-item col-6 tab-title"><a href="#application-research" data-toggle="tab" class="nav-link">Research<br/>Applications</a></li>
+    <li class="nav-item col-6 tab-title"><a href="#application-facility" data-toggle="tab" class="nav-link active">Facility<br/>Applications</a>
+    </li>
+    <li class="nav-item col-6 tab-title"><a href="#application-research" data-toggle="tab"
+                                            class="nav-link">Research<br/>Applications</a></li>
   </ul>
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="application-facility">
       <div class="container application-table-wrapper">
         <table class="table table-striped application-table">
           <thead>
-            <tr>
-              <th><i class="fa fa-tag"></i> Alias</th>
-              <th><i class="fa fa-exclamation-circle"></i> Status</th>
-              <th><i class="fa fa-calendar-check-o"></i> Start</th>
-              <th><i class="fa fa-calendar-times-o"></i> End</th>
-            </tr>
+          <tr>
+            <th><i class="fa fa-tag"></i> Alias</th>
+            <th><i class="fa fa-exclamation-circle"></i> Status</th>
+            <th><i class="fa fa-calendar-check-o"></i> Start</th>
+            <th><i class="fa fa-calendar-times-o"></i> End</th>
+          </tr>
           </thead>
           <tbody>
           {% for facility_app in facility_application_list %}
             <tr>
               <td class="cell-link">
                 <a href="#facility-{{ facility_app.id }}-detail-modal"
-                   class="hvr-wobble-skew" data-toggle="modal">{{ facility_app.alias }}</a></td>
+                   class="hvr-wobble-skew" data-toggle="modal">{{ facility_app.alias|truncatechars:"7" }}</a></td>
               <td>
                 {% if facility_app.status == 'PEN' or facility_app.status == 'CLO' %}
                   <strong class="text-dark">{{ facility_app.get_status_display }}</strong>
@@ -54,7 +56,39 @@
       </div>
     </div>
     <div role="tabpanel" class="tab-pane" id="application-research">
-      <div class="container">
+      <div class="container application-table-wrapper">
+        <table class="table table-striped application-table">
+          <thead>
+          <tr>
+            <th><i class="fa fa-tag"></i> Title</th>
+            <th><i class="fa fa-exclamation-circle"></i> Status</th>
+            <th><i class="fa fa-calendar-check-o"></i> Start</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for research_app in research_application_list %}
+            <tr>
+              <td class="cell-link">
+                <a href="#research-{{ research_app.id }}-detail-modal"
+                   class="hvr-wobble-skew" data-toggle="modal">{{ research_app.title|truncatechars:"20" }}</a></td>
+              <td>
+                {% if research_app.status == 'PEN' or research_app.status == 'CLO' %}
+                  <strong class="text-dark">{{ research_app.get_status_display }}</strong>
+                {% elif research_app.status == 'ONG' or research_app.status == 'BOR' %}
+                  <strong class="text-success">{{ research_app.get_status_display }}</strong>
+                {% elif research_app.status == 'APP' %}
+                  <strong class="text-primary">{{ research_app.get_status_display }}</strong>
+                {% elif research_app.status == 'WAI' %}
+                  <strong class="text-info">{{ research_app.get_status_display }}</strong>
+                {% else %}
+                  <strong class="text-danger">{{ research_app.get_status_display }}</strong>
+                {% endif %}
+              </td>
+              <td>{{ research_app.start|date:"Y/m/d" }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -82,17 +116,18 @@
           </div>
 
           <form method="post" class="update-form"
+                data-application-type="FACILITY"
                 data-ajax-url="{% url 'ajax-app' %}"
                 data-remove-url="{% url 'remove-facility-from-list' %}"
                 data-facility-app-id="{{ facility_app.id }}">
             {% csrf_token %}
-            <input type="hidden" name="id" value="{{ facility_app.id }}" />
+            <input type="hidden" name="id" value="{{ facility_app.id }}"/>
             <div class="modal-body">
               <table class="application-detail-table">
                 <tr>
                   <td class="cell-title"><i class="fa fa-tag"></i> Alias</td>
                   <td colspan="2"><input type="text" name="alias" class="form-control"
-                       placeholder="{{ facility_app.alias }}" title="Application Alias"/></td>
+                                         placeholder="{{ facility_app.alias }}" title="Application Alias"/></td>
                 </tr>
                 <tr>
                   <td class="cell-title"><i class="fa fa-calendar-check-o"></i> Start Date</td>
@@ -143,42 +178,48 @@
                   </td>
                 </tr>
               </table>
-              <hr />
+              <hr/>
 
               <h5 class="text-center"><i class="fa fa-list-ul"></i>
-                 Facility List &nbsp;
+                Facility List &nbsp;
                 <small class="text-dark">({{ user_quota }} / {{ user.limit }})</small>
               </h5>
               {% if facility_app.status == 'PEN' and facility_app.items.count > 1 %}
                 <h6 class="text-center text-danger"><i class="fa fa-exclamation-triangle"></i>
                   Remove will take effect immediately</h6>
               {% endif %}
-              <div class="facility-summary-wrapper">
+              <div class="summary-wrapper">
                 <ul>
                   {% for fa, lists in context.items %}
                     {% if fa == facility_app %}
                       {% for list_name, list in lists.items %}
                         {% if list_name == 'apparatus_list' %}
                           {% for apparatus in list %}
-                            <li><h6 class="text-secondary"><i class="fa fa-flask"></i>
-                              &nbsp;{{ apparatus.name }} - {{ apparatus.model_no }}
-                              {% if facility_app.status == 'PEN' %}
-                                <button type="button" class="btn btn-warning btn-sm btn-remove pull-right hvr-grow"
-                                        data-facility-id="{{ apparatus.id }}">
-                                  <i class="fa fa-remove"></i> Remove</button>
-                              {% endif %}
-                            </h6></li>
+                            <li>
+                              <h6 class="text-secondary"><i class="fa fa-flask"></i>
+                                &nbsp;{{ apparatus.name }} - {{ apparatus.model_no }}
+                                {% if facility_app.status == 'PEN' %}
+                                  <button type="button" class="btn btn-warning btn-sm btn-remove pull-right hvr-grow"
+                                          data-facility-id="{{ apparatus.id }}">
+                                    <i class="fa fa-remove"></i> Remove
+                                  </button>
+                                {% endif %}
+                              </h6>
+                            </li>
                           {% endfor %}
                         {% else %}
                           {% for lab in list %}
-                            <li><h6 class="text-secondary"><i class="fa fa-building"></i>
-                              &nbsp;{{ lab.location }} - {{ lab.capacity }}
-                              {% if facility_app.status == 'PEN' %}
-                                <button type="button" class="btn btn-warning btn-sm btn-remove pull-right hvr-grow"
-                                        data-facility-id="{{ lab.id }}">
-                                  <i class="fa fa-remove"></i> Remove</button>
-                              {% endif %}
-                            </h6></li>
+                            <li>
+                              <h6 class="text-secondary"><i class="fa fa-building"></i>
+                                &nbsp;{{ lab.location }} - {{ lab.capacity }}
+                                {% if facility_app.status == 'PEN' %}
+                                  <button type="button" class="btn btn-warning btn-sm btn-remove pull-right hvr-grow"
+                                          data-facility-id="{{ lab.id }}">
+                                    <i class="fa fa-remove"></i> Remove
+                                  </button>
+                                {% endif %}
+                              </h6>
+                            </li>
                           {% endfor %}
                         {% endif %}
                       {% endfor %}
@@ -191,14 +232,148 @@
             </div>
             <div class="modal-footer">
               <i class="fa fa-check fa-lg text-success update-message" id="update-message-{{ facility_app.id }}"></i>
-              <button data-action="UPDATE" type="button" class="btn btn-primary btn-action"><i class="fa fa-save"></i> Save</button>
+              <button data-action="UPDATE" type="button" class="btn btn-primary btn-action"><i class="fa fa-save"></i>
+                Save
+              </button>
               {% if facility_app.status == 'PEN' %}
-                <button data-action="APPLY" type="button" class="btn btn-success btn-action"><i class="fa fa-send"></i> Apply</button>
+                <button data-action="APPLY" type="button" class="btn btn-success btn-action"><i class="fa fa-send"></i>
+                  Apply
+                </button>
               {% endif %}
               {% if facility_app.status == 'APP' %}
-                <button data-action="WITHDRAW" type="button" class="btn btn-secondary btn-action"><i class="fa fa-reply-all"></i> Withdraw</button>
+                <button data-action="WITHDRAW" type="button" class="btn btn-secondary btn-action"><i
+                  class="fa fa-reply-all"></i> Withdraw
+                </button>
               {% endif %}
               {% if facility_app.status == 'PEN' or facility_app.status == 'CLO' %}
+                <button data-action="DELETE" type="button" class="btn btn-danger btn-action"><i class="fa fa-times"></i>
+                  Delete
+                </button>
+              {% endif %}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+  {% for research_app in research_application_list %}
+    <div class="modal fade" id="research-{{ research_app.id }}-detail-modal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Application Status -
+              {% if research_app.status == 'PEN' or research_app.status == 'CLO' %}
+                <strong class="text-dark">{{ research_app.get_status_display }}</strong>
+              {% elif research_app.status == 'ONG' or research_app.status == 'BOR' %}
+                <strong class="text-success">{{ research_app.get_status_display }}</strong>
+              {% elif research_app.status == 'APP' %}
+                <strong class="text-primary">{{ research_app.get_status_display }}</strong>
+              {% elif research_app.status == 'WAI' %}
+                <strong class="text-info">{{ research_app.get_status_display }}</strong>
+              {% else %}
+                <strong class="text-danger">{{ research_app.get_status_display }}</strong>
+              {% endif %}
+            </h4>
+          </div>
+
+          <form method="post" class="update-form"
+                data-application-type="RESEARCH"
+                data-ajax-url="{% url 'ajax-app' %}"
+                data-add-account-url="{% url 'add-account-to-list' %}"
+                data-research-app-id="{{ research_app.id }}">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ research_app.id }}"/>
+            <div class="modal-body">
+              <table class="application-detail-table">
+                <tr>
+                  <td class="cell-title"><i class="fa fa-tag"></i> Title</td>
+                  <td colspan="2"><input type="text" name="title" class="form-control" placeholder="{{ research_app.title }}"/></td>
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-calendar-check-o"></i> Start Date</td>
+                  <td>{{ research_app.start|date:"Y/m/d" }}</td>
+                  {% if research_app.status == 'PEN' %}
+                    <td><input type="date" name="start" class="form-control"/></td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-calendar-times-o"></i> EST. End</td>
+                  <td>{{ research_app.end|date:"Y/m/d" }}</td>
+                  {% if research_app.status == 'PEN' %}
+                    <td><input type="date" name="end" class="form-control"/></td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-question"></i> Extra Words</td>
+                  <td colspan="2">
+                    {% if research_app.status == 'PEN' %}
+                      <textarea class="form-control" name="reason">{{ research_app.reason }}</textarea>
+                    {% else %}
+                      <textarea class="form-control" name="reason" readonly>{{ research_app.reason }}</textarea>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-reply"></i> Staff Reply</td>
+                  <td colspan="2">
+                    {% if research_app.status == 'PEN' %}
+                      <textarea class="form-control" readonly>You haven't applied it yet.</textarea>
+                    {% else %}
+                      <textarea class="form-control" readonly>{{ research_app.reply }}</textarea>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-bell-o"></i> Created at</td>
+                  <td colspan="2">{{ research_app.created_at|date:"Y/m/d, h:ia" }}</td>
+                </tr>
+                <tr>
+                  <td class="cell-title"><i class="fa fa-bell"></i> Applied at</td>
+                  <td colspan="2">
+                    {% if research_app.status == 'PEN' %}
+                      -
+                    {% else %}
+                      {{ research_app.applied_at|date:"Y/m/d, h:ia" }}
+                    {% endif %}
+                  </td>
+                </tr>
+              </table>
+              <hr/>
+
+              <h5 class="text-center"><i class="fa fa-users"></i> Team Members</h5>
+              {% if research_app.status == 'PEN' and research_app.members.count > 1 %}
+                <h6 class="text-center text-danger"><i class="fa fa-exclamation-triangle"></i>
+                  Remove will take effect immediately</h6>
+              {% endif %}
+              <div class="summary-wrapper">
+                <ul>
+                  {% for account in research_app.members.all %}
+                  <li><h6 class="text-secondary"><i class="fa fa-user"></i>&nbsp;
+                    {{ account }}
+                    {% if research_app.status == 'PEN' %}
+                      <button type="button" class="btn btn-warning btn-sm btn-remove pull-right hvr-grow"
+                              data-account-id="{{ account.id }}">
+                        <i class="fa fa-remove"></i> Remove
+                      </button>
+                    {% endif %}
+                  </h6></li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <h6 class="text-center text-info apply-message" id="apply-message-{{ research_app.id }}">
+                <i class="fa fa-exclamation-circle"></i>&nbsp;<span></span></h6>
+            </div>
+            <div class="modal-footer">
+              <i class="fa fa-check fa-lg text-success update-message" id="update-message-{{ research_app.id }}"></i>
+              <button data-action="UPDATE" type="button" class="btn btn-primary btn-action"><i class="fa fa-save"></i> Save</button>
+              {% if research_app.status == 'PEN' %}
+                <button data-action="APPLY" type="button" class="btn btn-success btn-action"><i class="fa fa-send"></i> Apply</button>
+              {% endif %}
+              {% if research_app.status == 'APP' %}
+                <button data-action="WITHDRAW" type="button" class="btn btn-secondary btn-action"><i class="fa fa-reply-all"></i> Withdraw</button>
+              {% endif %}
+              {% if research_app.status == 'PEN' or research_app.status == 'CLO' %}
                 <button data-action="DELETE" type="button" class="btn btn-danger btn-action"><i class="fa fa-times"></i> Delete</button>
               {% endif %}
             </div>
