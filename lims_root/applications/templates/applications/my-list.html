@@ -118,7 +118,7 @@
 
           <form method="post" class="update-form"
                 data-application-type="FACILITY"
-                data-ajax-url="{% url 'ajax-app' %}"
+                data-ajax-url="{% url 'ajax-application-switcher' %}"
                 data-remove-url="{% url 'remove-facility-from-list' %}"
                 data-facility-app-id="{{ facility_app.id }}">
             {% csrf_token %}
@@ -280,9 +280,8 @@
 
           <form method="post" class="update-form"
                 data-application-type="RESEARCH"
-                data-ajax-url="{% url 'ajax-app' %}"
-                data-search-account-url="{% url 'search-account' %}"
-                data-add-account-url="{% url 'add-account-to-list' %}"
+                data-ajax-url="{% url 'ajax-application-switcher' %}"
+                data-ajax-account-url="{% url 'ajax-account-switcher' %}"
                 data-research-app-id="{{ research_app.id }}">
             {% csrf_token %}
             <input type="hidden" name="id" value="{{ research_app.id }}"/>

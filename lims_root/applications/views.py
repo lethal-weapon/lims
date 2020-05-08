@@ -37,7 +37,7 @@ def my_list(request):
 
 
 @login_required(login_url=reverse_lazy('login'))
-def ajax_switcher(request):
+def ajax_application_switcher(request):
     action = request.GET.get('action')
 
     if action == 'CREATE':
@@ -221,10 +221,49 @@ def remove_facility_from_list(request):
     return JsonResponse({'is_success': False})
 
 
+@login_required(login_url=reverse_lazy('login'))
+def ajax_account_switcher(request):
+    action = request.GET.get('action')
+
+    if action == 'SEARCH':
+        return search_account(request)
+    elif action == 'ADD':
+        return add_account(request)
+    elif action == 'REMOVE':
+        return remove_account(request)
+
+
+# Search account based on name/email/campus_id field
+def search_account(request):
+    text = request.GET.get('text')
+    researchAppID = request.GET.get('id')
+    matchedQS, matchedAccounts = set(), set()
+
+    existed_user_ids = [user.id for user in ResearchApplication.objects \
+        .get(id=researchAppID).members.all()]
+    accounts = Account.objects.filter(
+        is_verified=True
+    ).filter(
+        role__in=['TEA', 'STU']
+    ).exclude(
+        id__in=existed_user_ids
+    )
+
+    matchedQS.add(accounts.filter(name__contains=text))
+    matchedQS.add(accounts.filter(email__contains=text))
+    matchedQS.add(accounts.filter(campus_id__contains=text))
+
+    for qs in matchedQS:
+        for account in qs:
+            matchedAccounts.add(account)
+
+    data = serializers.serialize('json', matchedAccounts)
+    return HttpResponse(data, content_type='application/json')
+
+
 # Add a user to 'members' field of an research
 # application list whose status is PENDING
-@login_required(login_url=reverse_lazy('login'))
-def add_account_to_list(request):
+def add_account(request):
     a = Account.objects.get(id=request.GET.get('account_id'))
     ra = ResearchApplication.objects.get(id=request.GET.get('id'))
 
@@ -237,21 +276,16 @@ def add_account_to_list(request):
     return JsonResponse({'is_success': False})
 
 
-# Search account based on campus id or name field
-@login_required(login_url=reverse_lazy('login'))
-def search_account(request):
-    text = request.GET.get('text')
-    accounts = Account.objects.filter(is_verified=True).filter(role__in=['TEA', 'STU'])
-    matchedQS = set()
-    matchedAccounts = set()
+# Remove a user from 'members' field of an research
+# application list whose status is PENDING
+def remove_account(request):
+    a = Account.objects.get(id=request.GET.get('account_id'))
+    ra = ResearchApplication.objects.get(id=request.GET.get('id'))
 
-    matchedQS.add(accounts.filter(name__contains=text))
-    matchedQS.add(accounts.filter(email__contains=text))
-    matchedQS.add(accounts.filter(campus_id__contains=text))
+    if a and ra:
+        if ra.status == 'PEN' and (a in ra.members.all()):
+            ra.members.remove(a)
+            ra.save()
+            return JsonResponse({'is_success': True})
 
-    for qs in matchedQS:
-        for account in qs:
-            matchedAccounts.add(account)
-
-    data = serializers.serialize('json', matchedAccounts)
-    return HttpResponse(data, content_type='application/json')
+    return JsonResponse({'is_success': False})

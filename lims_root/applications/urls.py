@@ -11,14 +11,12 @@ urlpatterns = [
     path('cra/', TemplateView.as_view(template_name='applications/apply-research.html'),
          name='create-research-application'),
 
-    path('ajax-app/', views.ajax_switcher,
-         name='ajax-app'),
+    path('ajax-application-switcher/', views.ajax_application_switcher,
+         name='ajax-application-switcher'),
     path('ajax-rffl', views.remove_facility_from_list,
          name='remove-facility-from-list'),
 
 
-    path('ajax-sa', views.search_account,
-         name='search-account'),
-    path('ajax-aatl', views.add_account_to_list,
-         name='add-account-to-list'),
+    path('ajax-account-switcher/', views.ajax_account_switcher,
+         name='ajax-account-switcher'),
 ]

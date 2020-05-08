@@ -28,16 +28,17 @@ $(function () {
   $('.search-input').on('change', function () {
     let text = $(this).val();
     let $form = $(this).closest('form');
-    let URL = $form.attr('data-search-account-url');
-    let selector = '#search-result-container-' +
-      $form.attr('data-research-app-id') + ' > ul ';
+    let id = $form.attr('data-research-app-id');
+    let URL = $form.attr('data-ajax-account-url');
+    let selector = '#search-result-container-' + id + ' > ul ';
+    let action = 'SEARCH';
 
     if (text.length < 1) {
       $(selector + 'li').remove();
       $(selector).html('<li><h6 class="text-center text-dark">' +
-          '<strong>:( &nbsp;GIVE ME SOMETHING TO SEARCH</strong></h6></li>');
+        '<strong>:( &nbsp;GIVE ME SOMETHING TO SEARCH</strong></h6></li>');
     } else {
-      searchAccount(text, URL, selector);
+      searchAccount(action, id, text, URL, selector);
     }
   });
 
@@ -56,10 +57,15 @@ $(function () {
 });
 
 // Account search control
-function searchAccount(searchText, searchURL, containerSelector) {
+function searchAccount(action, researchAppID, searchText,
+                       searchURL, containerSelector) {
   $.ajax({
     url: searchURL,
-    data: {'text': searchText},
+    data: {
+      'id': researchAppID,
+      'text': searchText,
+      'action': action
+    },
     timeout: 2000,
     dataType: 'json',
 
