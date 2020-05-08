@@ -11,13 +11,14 @@
 
 {% block application-content %}
   <ul class="nav nav-tabs row">
-    <li class="nav-item col-6 tab-title"><a href="#application-facility" data-toggle="tab" class="nav-link active">Facility<br/>Applications</a>
+    <li class="nav-item col-6 tab-title"><a href="#application-facility" data-toggle="tab"
+                                            class="nav-link">Facility<br/>Applications</a>
     </li>
     <li class="nav-item col-6 tab-title"><a href="#application-research" data-toggle="tab"
-                                            class="nav-link">Research<br/>Applications</a></li>
+                                            class="nav-link active">Research<br/>Applications</a></li>
   </ul>
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="application-facility">
+    <div role="tabpanel" class="tab-pane" id="application-facility">
       <div class="container application-table-wrapper">
         <table class="table table-striped application-table">
           <thead>
@@ -55,7 +56,7 @@
         </table>
       </div>
     </div>
-    <div role="tabpanel" class="tab-pane" id="application-research">
+    <div role="tabpanel" class="tab-pane active" id="application-research">
       <div class="container application-table-wrapper">
         <table class="table table-striped application-table">
           <thead>
@@ -280,6 +281,7 @@
           <form method="post" class="update-form"
                 data-application-type="RESEARCH"
                 data-ajax-url="{% url 'ajax-app' %}"
+                data-search-account-url="{% url 'search-account' %}"
                 data-add-account-url="{% url 'add-account-to-list' %}"
                 data-research-app-id="{{ research_app.id }}">
             {% csrf_token %}
@@ -341,7 +343,11 @@
               </table>
               <hr/>
 
-              <h5 class="text-center"><i class="fa fa-users"></i> Team Members</h5>
+              <h5 class="text-center"><i class="fa fa-users"></i> Team Members &nbsp;
+                {% if research_app.status == 'PEN' %}
+                  <i class="fa fa-plus hvr-grow-shadow search-trigger" title="Show search panel"></i>
+                {% endif %}
+              </h5>
               {% if research_app.status == 'PEN' and research_app.members.count > 1 %}
                 <h6 class="text-center text-danger"><i class="fa fa-exclamation-triangle"></i>
                   Remove will take effect immediately</h6>
@@ -361,6 +367,20 @@
                   {% endfor %}
                 </ul>
               </div>
+
+              <div class="search-panel" id="search-panel-{{ research_app.id }}">
+                <div class="form-group input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-search"></i></span>
+                  </div>
+                  <input type="search" class="form-control search-input"
+                         placeholder="Name / Email / Campus ID"/>
+                </div>
+                <div class="summary-wrapper" id="search-result-container-{{ research_app.id }}">
+                  <ul></ul>
+                </div>
+              </div>
+
               <h6 class="text-center text-info apply-message" id="apply-message-{{ research_app.id }}">
                 <i class="fa fa-exclamation-circle"></i>&nbsp;<span></span></h6>
             </div>

@@ -57,3 +57,12 @@
   margin:-7px 20px 15px 0;
   border-radius:30px;
 }
+
+.search-trigger:hover {
+  color:cornflowerblue;
+  cursor:pointer;
+}
+
+.search-panel {
+  display:none;
+}

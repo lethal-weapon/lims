@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.core import serializers
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
@@ -234,3 +235,23 @@ def add_account_to_list(request):
             return JsonResponse({'is_success': True})
 
     return JsonResponse({'is_success': False})
+
+
+# Search account based on campus id or name field
+@login_required(login_url=reverse_lazy('login'))
+def search_account(request):
+    text = request.GET.get('text')
+    accounts = Account.objects.filter(is_verified=True).filter(role__in=['TEA', 'STU'])
+    matchedQS = set()
+    matchedAccounts = set()
+
+    matchedQS.add(accounts.filter(name__contains=text))
+    matchedQS.add(accounts.filter(email__contains=text))
+    matchedQS.add(accounts.filter(campus_id__contains=text))
+
+    for qs in matchedQS:
+        for account in qs:
+            matchedAccounts.add(account)
+
+    data = serializers.serialize('json', matchedAccounts)
+    return HttpResponse(data, content_type='application/json')

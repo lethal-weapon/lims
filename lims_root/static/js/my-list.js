@@ -6,6 +6,42 @@
 $(function () {
   $('.application-table').DataTable();
 
+  // search panel switcher
+  $('.search-trigger').on('click', function () {
+    $(this).fadeOut(500);
+    let $searchPanel = $('#search-panel-' + $(this).closest('form').attr('data-research-app-id'));
+
+    if ($(this).hasClass('fa-plus')) {
+      $(this).switchClass('fa-plus', 'fa-minus');
+      $(this).attr('title', 'Hide search panel');
+      $searchPanel.fadeIn(1000);
+    } else {
+      $(this).switchClass('fa-minus', 'fa-plus');
+      $(this).attr('title', 'Show search panel');
+      $searchPanel.fadeOut(1000);
+    }
+
+    $(this).fadeIn(500);
+  });
+
+  // search control
+  $('.search-input').on('change', function () {
+    let text = $(this).val();
+    let $form = $(this).closest('form');
+    let URL = $form.attr('data-search-account-url');
+    let selector = '#search-result-container-' +
+      $form.attr('data-research-app-id') + ' > ul ';
+
+    if (text.length < 1) {
+      $(selector + 'li').remove();
+      $(selector).html('<li><h6 class="text-center text-dark">' +
+          '<strong>:( &nbsp;GIVE ME SOMETHING TO SEARCH</strong></h6></li>');
+    } else {
+      searchAccount(text, URL, selector);
+    }
+  });
+
+  // button controls
   $('.btn-action').on('click', function () {
     ajaxApplication($(this).attr('data-action'), $(this).closest('form'));
   });
@@ -18,6 +54,39 @@ $(function () {
       $(this).attr('data-facility-id'));
   });
 });
+
+// Account search control
+function searchAccount(searchText, searchURL, containerSelector) {
+  $.ajax({
+    url: searchURL,
+    data: {'text': searchText},
+    timeout: 2000,
+    dataType: 'json',
+
+    success: function (data) {
+      let matchedList = '';
+      $.each(data, function (key, val) {
+        matchedList += '<li><h6 class="text-secondary"><i class="fa fa-user"></i>&nbsp; ';
+        matchedList += val.fields.name + ' / ' + val.fields.campus_id + ' / ' + val.fields.school;
+        matchedList += '<button type="button" class="btn btn-warning btn-sm btn-add pull-right hvr-grow" ';
+        matchedList += 'data-account-id="' + val.pk + '">';
+        matchedList += '<i class="fa fa-plus-circle"></i> Add</button></h6></li>';
+      });
+
+      // no matches
+      if (matchedList.length < 1) {
+        matchedList += '<li><h6 class="text-center text-dark">' +
+          '<strong>:( &nbsp;NO MATCH FOUND</strong></h6></li>';
+      }
+      // remove old content, insert new ones, show up from top down
+      $(containerSelector + 'li').remove();
+      $(containerSelector).html(matchedList);
+      $(containerSelector + 'li').hide().each(function (index) {
+        $(this).fadeIn(500 * index);
+      });
+    }
+  });
+}
 
 // All bottom buttons' action on application detail window
 function ajaxApplication(action, form) {
