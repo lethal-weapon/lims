@@ -11,12 +11,12 @@ $(function () {
     $(this).fadeOut(500);
     let $searchPanel = $('#search-panel-' + $(this).closest('form').attr('data-research-app-id'));
 
-    if ($(this).hasClass('fa-plus')) {
-      $(this).switchClass('fa-plus', 'fa-minus');
+    if ($(this).hasClass('fa-expand')) {
+      $(this).switchClass('fa-expand', 'fa-compress');
       $(this).attr('title', 'Hide search panel');
       $searchPanel.fadeIn(1000);
     } else {
-      $(this).switchClass('fa-minus', 'fa-plus');
+      $(this).switchClass('fa-compress', 'fa-expand');
       $(this).attr('title', 'Show search panel');
       $searchPanel.fadeOut(1000);
     }
@@ -42,7 +42,11 @@ $(function () {
     }
   });
 
-  // button controls
+  setButtonTriggers();
+});
+
+// Set all buttons' click trigger
+function setButtonTriggers() {
   $('.btn-action').on('click', function () {
     ajaxApplication($(this).attr('data-action'), $(this).closest('form'));
   });
@@ -54,7 +58,18 @@ $(function () {
       $(this).closest('form').attr('data-facility-app-id'),
       $(this).attr('data-facility-id'));
   });
-});
+
+  // add/remove account to/from member list
+  $('.btn-account-action').on('click', function () {
+    accountAction(
+      $(this),
+      $(this).closest('form').attr('data-ajax-account-url'),
+      $(this).attr('data-action'),
+      $(this).attr('data-account-id'),
+      $(this).closest('form').attr('data-research-app-id')
+    );
+  });
+}
 
 // Account search control
 function searchAccount(action, researchAppID, searchText,
@@ -74,8 +89,8 @@ function searchAccount(action, researchAppID, searchText,
       $.each(data, function (key, val) {
         matchedList += '<li><h6 class="text-secondary"><i class="fa fa-user"></i>&nbsp; ';
         matchedList += val.fields.name + ' / ' + val.fields.campus_id + ' / ' + val.fields.school;
-        matchedList += '<button type="button" class="btn btn-warning btn-sm btn-add pull-right hvr-grow" ';
-        matchedList += 'data-account-id="' + val.pk + '">';
+        matchedList += '<button type="button" class="btn btn-warning btn-sm btn-account-action pull-right hvr-grow" ';
+        matchedList += 'data-action="ADD" data-account-id="' + val.pk + '">';
         matchedList += '<i class="fa fa-plus-circle"></i> Add</button></h6></li>';
       });
 
@@ -90,6 +105,27 @@ function searchAccount(action, researchAppID, searchText,
       $(containerSelector + 'li').hide().each(function (index) {
         $(this).fadeIn(500 * index);
       });
+      setButtonTriggers();
+    }
+  });
+}
+
+function accountAction(button, URL, action,
+                       accountID, researchAppID) {
+  $.ajax({
+    url: URL,
+    data: {
+      'id': researchAppID,
+      'account_id': accountID,
+      'action': action
+    },
+    timeout: 2000,
+    dataType: 'json',
+
+    success: function (data) {
+      if (data['is_success']) {
+        $(button).closest('li').fadeOut(2000);
+      }
     }
   });
 }

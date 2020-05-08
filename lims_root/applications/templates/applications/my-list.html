@@ -12,13 +12,13 @@
 {% block application-content %}
   <ul class="nav nav-tabs row">
     <li class="nav-item col-6 tab-title"><a href="#application-facility" data-toggle="tab"
-                                            class="nav-link">Facility<br/>Applications</a>
+                                            class="nav-link active">Facility<br/>Applications</a>
     </li>
     <li class="nav-item col-6 tab-title"><a href="#application-research" data-toggle="tab"
-                                            class="nav-link active">Research<br/>Applications</a></li>
+                                            class="nav-link">Research<br/>Applications</a></li>
   </ul>
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane" id="application-facility">
+    <div role="tabpanel" class="tab-pane active" id="application-facility">
       <div class="container application-table-wrapper">
         <table class="table table-striped application-table">
           <thead>
@@ -56,7 +56,7 @@
         </table>
       </div>
     </div>
-    <div role="tabpanel" class="tab-pane active" id="application-research">
+    <div role="tabpanel" class="tab-pane" id="application-research">
       <div class="container application-table-wrapper">
         <table class="table table-striped application-table">
           <thead>
@@ -344,7 +344,7 @@
 
               <h5 class="text-center"><i class="fa fa-users"></i> Team Members &nbsp;
                 {% if research_app.status == 'PEN' %}
-                  <i class="fa fa-plus hvr-grow-shadow search-trigger" title="Show search panel"></i>
+                  <i class="fa fa-expand hvr-grow-shadow search-trigger" title="Show search panel"></i>
                 {% endif %}
               </h5>
               {% if research_app.status == 'PEN' and research_app.members.count > 1 %}
@@ -355,10 +355,10 @@
                 <ul>
                   {% for account in research_app.members.all %}
                   <li><h6 class="text-secondary"><i class="fa fa-user"></i>&nbsp;
-                    {{ account }}
+                    {{ account.name }} / {{ account.campus_id }} / {{ account.school }}
                     {% if research_app.status == 'PEN' %}
-                      <button type="button" class="btn btn-warning btn-sm btn-remove pull-right hvr-grow"
-                              data-account-id="{{ account.id }}">
+                      <button type="button" class="btn btn-warning btn-sm btn-account-action pull-right hvr-grow"
+                              data-action="REMOVE" data-account-id="{{ account.id }}">
                         <i class="fa fa-remove"></i> Remove
                       </button>
                     {% endif %}
