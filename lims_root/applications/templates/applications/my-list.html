@@ -351,7 +351,7 @@
                 <h6 class="text-center text-danger"><i class="fa fa-exclamation-triangle"></i>
                   Remove will take effect immediately</h6>
               {% endif %}
-              <div class="summary-wrapper">
+              <div class="summary-wrapper" id="member-container-{{ research_app.id }}">
                 <ul>
                   {% for account in research_app.members.all %}
                   <li><h6 class="text-secondary"><i class="fa fa-user"></i>&nbsp;

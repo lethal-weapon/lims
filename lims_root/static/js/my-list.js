@@ -124,7 +124,22 @@ function accountAction(button, URL, action,
 
     success: function (data) {
       if (data['is_success']) {
-        $(button).closest('li').fadeOut(2000);
+        let $newMemberItem = $(button).closest('li');
+        $newMemberItem.fadeOut(1000);
+
+        // if it's a add action, move this item from search panel
+        // to member panel after turning its add button into remove button
+        if (action === 'ADD') {
+          let $memberButton = $newMemberItem.find('button');
+          $memberButton.attr('data-action', 'REMOVE');
+          $memberButton.html('<i class="fa fa-remove"></i> Remove');
+
+          let selector = '#member-container-' + researchAppID + ' > ul';
+          $(selector).append($newMemberItem);
+          $newMemberItem.fadeIn(1000);
+        }
+      } else {
+        $('#apply-message-' + researchAppID + ' > span').text('Server Error');
       }
     }
   });
