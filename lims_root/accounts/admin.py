@@ -58,7 +58,7 @@ class UserChangeForm(forms.ModelForm):
 
 
 class AccountAdmin(UserAdmin, ExportCsvMixin, ImportCsvMixin):
-    change_list_template = 'accounts/accounts_changelist.html'
+    change_list_template = 'lims_site/my-admin-changelist.html'
 
     # The forms to add and change user instances
     form = UserChangeForm
@@ -120,7 +120,7 @@ class AccountAdmin(UserAdmin, ExportCsvMixin, ImportCsvMixin):
 
     def import_csv(self, request):
         if request.method == 'GET':
-            return render(request, 'accounts/csv_form.html', {
+            return render(request, 'lims_site/csv-form.html', {
                 'form': CsvImportForm()
             })
 
