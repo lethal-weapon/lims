@@ -24,14 +24,14 @@ class ApplicationForm(ModelForm):
 class FacilityApplicationForm(ApplicationForm):
     class Meta:
         model = FacilityApplication
-        fields = [
+        fields = (
             'alias', 'start', 'end', 'reason',
-        ]
+        )
 
 
 class ResearchApplicationForm(ApplicationForm):
     class Meta:
         model = ResearchApplication
-        fields = [
+        fields = (
             'title', 'start', 'end', 'reason',
-        ]
+        )

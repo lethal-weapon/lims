@@ -51,9 +51,9 @@ class Account(AbstractBaseUser):
     last_login = models.DateTimeField(auto_now=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
-    name = models.CharField(max_length=50, unique=False, blank=True, null=True)
-    school = models.CharField(max_length=4, choices=SCHOOL_CHOICES, blank=True, null=True)
-    limit = models.IntegerField(default=0, verbose_name='Facility Borrow Limit')
+    name = models.CharField(max_length=50, unique=False, default='Anonymous')
+    school = models.CharField(max_length=4, choices=SCHOOL_CHOICES, default='TBD')
+    limit = models.IntegerField(verbose_name='Facility Borrow Limit', default=0)
 
     role = models.CharField(max_length=3, choices=ROLE_CHOICES, default='VIS')
     is_active = models.BooleanField(default=True)

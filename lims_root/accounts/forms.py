@@ -42,3 +42,17 @@ class AccountUpdateForm(forms.ModelForm):
         except Account.DoesNotExist:
             return email
         raise forms.ValidationError('Email "%s" is already in use.' % email)
+
+
+class AccountImportForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = (
+            'id', 'password', 'email', 'campus_id',
+            'name', 'school', 'limit',
+            'role', 'is_active', 'is_verified',
+        )
+
+
+class CsvImportForm(forms.Form):
+    csv_file = forms.FileField()
