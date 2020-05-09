@@ -57,12 +57,38 @@ class UserChangeForm(forms.ModelForm):
         return self.initial['password']
 
 
-class AccountAdmin(UserAdmin, ExportCsvMixin, ImportCsvMixin):
+# The base admin is able to import/export model data in CSV
+class MyBaseModelAdmin(admin.ModelAdmin, ExportCsvMixin, ImportCsvMixin):
     change_list_template = 'lims_site/my-admin-changelist.html'
+    actions = ('export_as_csv',)
+    model_import_form = forms.ModelForm
 
-    # The forms to add and change user instances
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('import-csv/', self.import_csv),
+        ]
+        return my_urls + urls
+
+    def import_csv(self, request):
+        if request.method == 'GET':
+            return render(request, 'lims_site/csv-form.html', {
+                'form': CsvImportForm()
+            })
+
+        elif request.method == 'POST':
+            self.import_as_csv(
+                csv_file=request.FILES['csv_file'],
+                model_form=self.model_import_form)
+            self.message_user(request, 'Your csv file has been imported')
+            return redirect('..')
+
+
+class AccountAdmin(UserAdmin, MyBaseModelAdmin):
+    # The forms to add/change/import user instances
     form = UserChangeForm
     add_form = UserCreationForm
+    model_import_form = AccountImportForm
 
     list_display = ('campus_id', 'name', 'school',
                     'email', 'role', 'is_verified',)
@@ -110,26 +136,6 @@ class AccountAdmin(UserAdmin, ExportCsvMixin, ImportCsvMixin):
 
     def mark_outdated_user(self, request, queryset):
         queryset.update(is_active=False, is_verified=False)
-
-    def get_urls(self):
-        urls = super().get_urls()
-        my_urls = [
-            path('import-csv/', self.import_csv),
-        ]
-        return my_urls + urls
-
-    def import_csv(self, request):
-        if request.method == 'GET':
-            return render(request, 'lims_site/csv-form.html', {
-                'form': CsvImportForm()
-            })
-
-        elif request.method == 'POST':
-            self.import_as_csv(
-                csv_file=request.FILES['csv_file'],
-                model_form=AccountImportForm)
-            self.message_user(request, 'Your csv file has been imported')
-            return redirect('..')
 
 
 admin.site.register(Account, AccountAdmin)

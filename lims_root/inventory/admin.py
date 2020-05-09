@@ -1,9 +1,11 @@
 from django.contrib import admin
 
+from accounts.admin import MyBaseModelAdmin
+from .forms import ApparatusImportForm, LaboratoryImportForm
 from .models import Apparatus, Laboratory
 
 
-class FacilityAdmin(admin.ModelAdmin):
+class FacilityAdmin(MyBaseModelAdmin):
     list_filter = ('school',)
     exclude = ('staff',)
 
@@ -31,6 +33,7 @@ class ApparatusAdmin(FacilityAdmin):
     search_fields = ('name', 'model_no',)
     date_hierarchy = 'purchased'
     list_per_page = 50
+    model_import_form = ApparatusImportForm
 
 
 class LaboratoryAdmin(FacilityAdmin):
@@ -38,6 +41,7 @@ class LaboratoryAdmin(FacilityAdmin):
     ordering = ('school', 'location',)
     search_fields = ('name', 'location',)
     list_per_page = 25
+    model_import_form = LaboratoryImportForm
 
 
 admin.site.register(Apparatus, ApparatusAdmin)
