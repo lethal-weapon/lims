@@ -7,8 +7,8 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('applied_at', 'start', 'end', 'status', 'applicant',)
     list_filter = ('status',)
     ordering = ('-applied_at', 'start',)
-    list_per_page = 10
     date_hierarchy = 'start'
+    list_per_page = 10
 
     def has_delete_permission(self, request, obj=None):
         if request.user.role == 'SUP':
