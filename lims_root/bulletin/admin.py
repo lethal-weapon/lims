@@ -1,16 +1,19 @@
 from django.contrib import admin
 
+from accounts.admin import MyBaseModelAdmin
+from .forms import ArticleImportForm, FacilityScheduleImportForm
 from .models import Article, FacilitySchedule
 
 
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin(MyBaseModelAdmin):
     list_display = ('author', 'published', 'subject',)
     readonly_fields = ('published',)
     ordering = ('-published', 'author',)
     search_fields = ('subject', 'content',)
     exclude = ('author',)
-    list_per_page = 15
     date_hierarchy = 'published'
+    list_per_page = 15
+    model_import_form = ArticleImportForm
 
     # Only set author field during the first save.
     def save_model(self, request, obj, form, change):
@@ -32,14 +35,15 @@ class ArticleAdmin(admin.ModelAdmin):
         return False
 
 
-class FacilityScheduleAdmin(admin.ModelAdmin):
+class FacilityScheduleAdmin(MyBaseModelAdmin):
     list_display = ('day', 'start', 'end', 'site', 'school',)
     list_filter = ('school',)
     ordering = ('-day', 'start',)
     search_fields = ('site',)
     exclude = ('creator',)
-    list_per_page = 25
     date_hierarchy = 'day'
+    list_per_page = 25
+    model_import_form = FacilityScheduleImportForm
 
     # Only set creator field during the first save.
     def save_model(self, request, obj, form, change):

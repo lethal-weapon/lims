@@ -1,16 +1,20 @@
 from misc.gen_csv_helper import *
-from misc.random_src import random_cost, random_date, random_location, random_model_no
+from misc.random_src import random_cost, random_date, random_location, random_model_no, random_time
 
 OUT_FILES = [
     'csv/accounts.csv',
     'csv/apparatuses.csv',
     'csv/laboratories.csv',
+    'csv/articles.csv',
+    'csv/facility-schedules.csv',
 ]
 
 MODEL_FIELDS = [
     'id,password,email,campus_id,name,school,limit,role,is_active,is_verified',
     'id,name,staff,school,cost,model_no,purchased',
     'id,name,staff,school,location,capacity',
+    'id,subject,content,author',
+    'id,school,site,day,start,end,creator',
 ]
 
 FACILITY_ID = 1
@@ -82,11 +86,40 @@ def gen_labs(rooms=75):
     return laboratories
 
 
+def gen_articles(narticle=25):
+    articles = []
+    for i in range(1, narticle + 1):
+        articles.append({
+            'id'     : i,
+            'subject': 'Here is the subject for news #' + str(i),
+            'content': 'Here is the corresponding content for news #' + str(i),
+            'author' : ROLES_IDS['STA'][randint(0, len(ROLES_IDS['STA']) - 1)],
+        })
+    return articles
+
+
+def gen_schedules(nschedule=50):
+    schedules = []
+    for i in range(1, nschedule + 1):
+        schedules.append({
+            'id'     : i,
+            'school' : SCHOOL_CHOICES[randint(0, len(SCHOOL_CHOICES) - 1)][0],
+            'site'   : random_location(),
+            'day'    : random_date(2020, 2021),
+            'start'  : random_time(8, 12),
+            'end'    : random_time(14, 18),
+            'creator': ROLES_IDS['STA'][randint(0, len(ROLES_IDS['STA']) - 1)],
+        })
+    return schedules
+
+
 def main():
     mappings = {
         0: gen_accounts,
         1: gen_apparatuses,
         2: gen_labs,
+        3: gen_articles,
+        4: gen_schedules,
     }
 
     for index, generator in mappings.items():
