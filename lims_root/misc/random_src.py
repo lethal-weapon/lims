@@ -87,7 +87,7 @@ def random_location():
     return string
 
 
-def random_cost(MIN=5, MAX=555):
+def random_cost(MIN=9, MAX=999):
     return str(randint(MIN, MAX) + (randint(0, 9) * 10 / 100)) + "0"
 
 

@@ -99,6 +99,7 @@ class AccountAdmin(UserAdmin, MyBaseModelAdmin):
     actions = ('export_as_csv', 'mark_verified_student',
                'mark_verified_teacher', 'mark_outdated_user',)
     filter_horizontal = ()
+    list_per_page = 25
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin

@@ -11,6 +11,8 @@ class ApplicationAdmin(admin.ModelAdmin):
     date_hierarchy = 'start'
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.role == 'SUP':
+            return True
         if obj and obj.applicant == request.user:
             return True
         return False

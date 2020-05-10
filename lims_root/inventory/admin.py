@@ -19,6 +19,8 @@ class FacilityAdmin(MyBaseModelAdmin):
         return self.permission_control(request, obj)
 
     def has_delete_permission(self, request, obj=None):
+        if request.user.role == 'SUP':
+            return True
         return self.permission_control(request, obj)
 
     def permission_control(self, request, obj=None):
