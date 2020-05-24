@@ -32,13 +32,9 @@ EMAIL_SUFFIX = (
     '@somesite.net',
 )
 
-PASSWORD_HASHES = [
-    'pbkdf2_sha256$180000$KCxbsQtjlf5c$GWmFNc2X0IfEstU4ncok+9WEGq3Jj7oHypdyf/2z+1k=',
-    'pbkdf2_sha256$180000$tCcmwmGq8DS4$dfH+rVOqkQSeLJDcNpZmkWPSyYQhKdC/UvaH6yt8Oh8=',
-    'pbkdf2_sha256$180000$YGOegNNQbuTv$xthOdv3ebGz0t/yJBF1qfFeIx0Q5AGx1VCAl31O9H80=',
-    'pbkdf2_sha256$180000$gmhPffvNL6ky$0ElRlCDw27D0A7MR20JzA6WZrSriN/9fBqaZugg9M5k=',
-    'pbkdf2_sha256$180000$pQXNuVNqjcgS$Oj4X+LKR+EoRJVyQlIj9p3vitIOOvNayK9ZDo0eip1Y=',
-]
+PASSWORD_HASHES = (
+    'pbkdf2_sha256$180000$NgmVkPjQVft1$gjw0B44I/q1HrvHpWGg0kmH8XswGWtsvW8ZwlaKEIdg=',
+)
 
 LABORATORY_NAMES = (
     'VR Experience', 'Computer Vision', 'IoT', '5G/6G Research',

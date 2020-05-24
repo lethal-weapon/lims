@@ -1,76 +1,76 @@
 id,name,staff,school,location,capacity
-99,IoT,6,CE,DZ7672,33
-100,Computer Vision,4,AUTO,B7849,10
-101,Multimedia,4,CE,DS3462,10
-102,5G/6G Research,9,OE,DZ5655,30
-103,Multi-Functional Room,5,OE,DZ1355,11
-104,Cloud Computing,5,AUTO,B9497,11
-105,IoT,8,SE,DS3635,28
-106,Data Mining Center,9,OE,A7776,11
-107,Limit Computing,6,CS,B8298,11
-108,Limit Computing,6,CS,C3879,14
-109,Teaching Plaza,8,SE,C7763,21
-110,Computer Vision,6,AUTO,DS9789,20
-111,Machine Learning,7,AUTO,B2819,27
-112,IoT,4,OE,C9581,11
-113,IoT,8,CS,DS5665,28
-114,Multi-Functional Room,4,OE,B3765,3
-115,Machine Learning,9,CS,DS8483,20
-116,Limit Computing,4,AUTO,A3874,10
-117,Training Plaza,5,AUTO,A8818,27
-118,Teaching Plaza,7,OE,DZ9346,23
-119,Machine Learning,4,AUTO,B6612,19
-120,Cloud Computing,5,AUTO,C6464,10
-121,Data Mining Center,8,OE,DS6727,24
-122,Multi-Functional Room,6,CE,A1851,4
-123,Data Mining Center,9,CE,A4799,26
-124,Computer Vision,6,SE,DS3599,15
-125,Multi-Functional Room,5,OE,B2656,9
-126,Linux Center,5,OE,DS5264,10
-127,Data Mining Center,7,SE,A4672,8
-128,Multimedia,8,SE,B2494,33
-129,Machine Learning,7,CE,A7397,16
-130,Linux Center,9,CE,B1572,10
-131,Data Mining Center,5,CS,B1461,32
-132,Cloud Computing,8,CS,A5588,10
-133,IoT,5,AUTO,A9292,18
-134,Multi-Functional Room,6,CE,DZ3399,29
-135,Multimedia,9,OE,A7854,8
-136,Computer Vision,7,AUTO,DS9543,15
-137,Training Plaza,5,SE,DS2839,6
-138,VR Experience,9,SE,C4264,13
-139,Training Plaza,6,CE,A8968,17
-140,IoT,4,SE,DS7657,28
-141,Multimedia,7,OE,DS5991,11
-142,Multimedia,7,CE,A1254,19
-143,Computer Vision,7,CS,A9448,24
-144,Multimedia,5,CE,DS1949,28
-145,Limit Computing,9,CS,DZ2492,18
-146,Teaching Plaza,7,SE,A6934,18
-147,VR Experience,8,OE,DZ5788,17
-148,Limit Computing,8,SE,DS2654,30
-149,Data Mining Center,4,OE,B8319,33
-150,Teaching Plaza,8,SE,C8244,13
-151,VR Experience,5,AUTO,C9472,13
-152,Data Mining Center,8,OE,B2898,26
-153,Linux Center,4,CS,DS8277,28
-154,Limit Computing,8,SE,B9597,18
-155,Linux Center,7,SE,DS5227,20
-156,IoT,4,AUTO,DZ8674,23
-157,Multimedia,7,OE,DS3327,11
-158,Multimedia,9,OE,DS8472,13
-159,Linux Center,9,SE,A9122,16
-160,Linux Center,9,SE,C4163,19
-161,Cloud Computing,6,AUTO,A9688,21
-162,Computer Vision,7,OE,A4969,12
-163,Teaching Plaza,6,SE,DS9821,9
-164,IoT,9,OE,A9453,17
-165,5G/6G Research,8,OE,DS4117,23
-166,Teaching Plaza,9,CE,C7683,14
-167,Multimedia,4,AUTO,DS7321,10
-168,Multimedia,4,AUTO,DS2315,4
-169,Machine Learning,6,OE,C6691,29
-170,Linux Center,7,AUTO,B6486,23
-171,Cloud Computing,8,AUTO,DS9789,31
-172,Limit Computing,9,SE,DS2799,23
-173,Teaching Plaza,8,AUTO,DS3231,32
+97,Data Mining Center,8,CS,DS4736,14
+98,Machine Learning,7,CS,B5984,18
+99,Multimedia,9,CS,DS1178,20
+100,Multi-Functional Room,6,CS,B3245,29
+101,IoT,6,SE,DZ1167,11
+102,Cloud Computing,5,OE,B8259,28
+103,Training Plaza,6,CS,B1921,21
+104,Computer Vision,6,CE,DS4189,11
+105,Teaching Plaza,4,OE,DZ3336,19
+106,Multi-Functional Room,5,OE,DS3336,25
+107,IoT,4,CE,DS6118,30
+108,Teaching Plaza,6,SE,A5961,8
+109,Multi-Functional Room,6,OE,DS6381,17
+110,5G/6G Research,9,SE,DS6917,33
+111,Multimedia,7,CE,B1347,25
+112,Cloud Computing,9,CS,DS3686,3
+113,Cloud Computing,7,AUTO,DS7586,29
+114,Machine Learning,8,AUTO,DS5395,23
+115,Linux Center,8,OE,DS4743,32
+116,Multimedia,7,CE,A6354,21
+117,Limit Computing,6,CS,DS4628,5
+118,Cloud Computing,8,AUTO,DS7569,30
+119,Limit Computing,9,OE,B4664,18
+120,Teaching Plaza,7,AUTO,B8946,29
+121,Teaching Plaza,8,CE,DS9664,6
+122,Data Mining Center,4,CE,A9722,9
+123,Limit Computing,6,CS,B9668,13
+124,Data Mining Center,5,OE,C5341,27
+125,Teaching Plaza,4,OE,A8212,27
+126,Computer Vision,9,OE,DS6987,29
+127,Machine Learning,5,CS,B3549,15
+128,Limit Computing,8,CE,C6516,33
+129,Multimedia,9,AUTO,DS8474,6
+130,Teaching Plaza,7,AUTO,B6476,24
+131,IoT,7,OE,A1929,28
+132,5G/6G Research,8,SE,DS2959,19
+133,Multimedia,9,SE,DS9825,7
+134,Teaching Plaza,9,SE,DS5381,23
+135,Machine Learning,9,CE,DS1985,3
+136,Teaching Plaza,6,OE,A8513,19
+137,Multi-Functional Room,6,CS,DS4559,5
+138,Teaching Plaza,7,CS,B2975,14
+139,Multimedia,8,AUTO,C3465,16
+140,5G/6G Research,4,AUTO,DS5579,32
+141,Multimedia,7,SE,DS9317,27
+142,Computer Vision,8,OE,B2585,12
+143,Multi-Functional Room,9,SE,A2257,32
+144,Data Mining Center,4,CE,B9868,4
+145,Data Mining Center,5,CE,DZ7253,22
+146,Linux Center,8,AUTO,B4764,32
+147,Computer Vision,6,OE,DZ1199,17
+148,VR Experience,4,CE,C8579,13
+149,Limit Computing,5,SE,A7578,25
+150,IoT,7,SE,DS5477,3
+151,Cloud Computing,8,SE,A2165,15
+152,Cloud Computing,9,SE,DS8331,10
+153,Multi-Functional Room,6,CE,DS7633,7
+154,5G/6G Research,7,OE,C4814,17
+155,Linux Center,5,SE,B1436,14
+156,Multimedia,5,SE,DS5156,9
+157,Linux Center,7,SE,DZ4974,5
+158,Multi-Functional Room,9,SE,DS3162,7
+159,Computer Vision,8,AUTO,B9166,18
+160,VR Experience,9,CE,A5247,16
+161,Machine Learning,8,AUTO,DS8671,33
+162,5G/6G Research,6,SE,DZ7916,21
+163,VR Experience,8,CE,A1364,11
+164,Multi-Functional Room,8,SE,DS6485,24
+165,5G/6G Research,9,SE,DS4748,13
+166,Machine Learning,7,AUTO,DZ3891,26
+167,Computer Vision,7,CS,A4398,26
+168,Multimedia,9,CS,A1896,3
+169,Multimedia,8,CE,A3549,28
+170,Cloud Computing,8,OE,C5366,21
+171,Linux Center,5,CE,C9953,13
