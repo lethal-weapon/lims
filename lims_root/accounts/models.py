@@ -65,7 +65,7 @@ class Account(AbstractBaseUser):
     objects = AccountManager()
 
     def __str__(self):
-        return self.campus_id
+        return self.name
 
     # Returns True if the user has the named permission.
     # If obj is provided, the permission needs to be

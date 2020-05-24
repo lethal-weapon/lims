@@ -289,7 +289,13 @@
               <table class="application-detail-table">
                 <tr>
                   <td class="cell-title"><i class="fa fa-tag"></i> Title</td>
-                  <td colspan="2"><input type="text" name="title" class="form-control" placeholder="{{ research_app.title }}"/></td>
+                  <td colspan="2">
+                    {% if research_app.status == 'PEN' %}
+                      <input type="text" name="title" class="form-control" placeholder="{{ research_app.title }}"/>
+                    {% else %}
+                      <label class="col-form-label">{{ research_app.title }}</label>
+                    {% endif %}
+                  </td>
                 </tr>
                 <tr>
                   <td class="cell-title"><i class="fa fa-calendar-check-o"></i> Start Date</td>
@@ -299,7 +305,7 @@
                   {% endif %}
                 </tr>
                 <tr>
-                  <td class="cell-title"><i class="fa fa-calendar-times-o"></i> EST. End</td>
+                  <td class="cell-title"><i class="fa fa-calendar-times-o"></i> ETA. End</td>
                   <td>{{ research_app.end|date:"Y/m/d" }}</td>
                   {% if research_app.status == 'PEN' %}
                     <td><input type="date" name="end" class="form-control"/></td>
@@ -385,8 +391,8 @@
             </div>
             <div class="modal-footer">
               <i class="fa fa-check fa-lg text-success update-message" id="update-message-{{ research_app.id }}"></i>
-              <button data-action="UPDATE" type="button" class="btn btn-primary btn-action"><i class="fa fa-save"></i> Save</button>
               {% if research_app.status == 'PEN' %}
+                <button data-action="UPDATE" type="button" class="btn btn-primary btn-action"><i class="fa fa-save"></i> Save</button>
                 <button data-action="APPLY" type="button" class="btn btn-success btn-action"><i class="fa fa-send"></i> Apply</button>
               {% endif %}
               {% if research_app.status == 'APP' %}
