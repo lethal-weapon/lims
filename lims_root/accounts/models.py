@@ -94,3 +94,7 @@ class Account(AbstractBaseUser):
         return self.role == 'STA' or \
                self.role == 'ADM' or \
                self.role == 'SUP'
+
+    @property
+    def is_superuser(self):
+        return self.role == 'SUP'

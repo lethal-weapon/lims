@@ -1,12 +1,26 @@
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
 
 from accounts.admin import MyBaseModelAdmin
 from .forms import ApparatusImportForm, LaboratoryImportForm
 from .models import Apparatus, Laboratory
 
 
+class StaffFilter(SimpleListFilter):
+    title = 'staff'
+    parameter_name = 'staff'
+
+    def lookups(self, request, model_admin):
+        staffs = set([f.staff for f in model_admin.model.objects.all()])
+        return [(s.id, s.name) for s in staffs]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(staff__id__exact=self.value())
+
+
 class FacilityAdmin(MyBaseModelAdmin):
-    list_filter = ('school',)
+    list_filter = ('school', StaffFilter,)
     exclude = ('staff',)
 
     # Only set staff field during the first save.
@@ -19,11 +33,11 @@ class FacilityAdmin(MyBaseModelAdmin):
         return self.permission_control(request, obj)
 
     def has_delete_permission(self, request, obj=None):
-        if request.user.role == 'SUP':
-            return True
         return self.permission_control(request, obj)
 
     def permission_control(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
         if obj and obj.staff == request.user:
             return True
         return False

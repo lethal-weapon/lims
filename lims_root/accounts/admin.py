@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import Group
+from django.core.checks import messages
 from django.shortcuts import redirect, render
 from django.urls import path
 
@@ -128,15 +129,55 @@ class AccountAdmin(UserAdmin, MyBaseModelAdmin):
         }),
     )
 
+    # def delete_model(self, request, obj):
+    # def delete_queryset(self, request, queryset):
+
+    # save is one kind of change too
+    def save_model(self, request, obj, form, change):
+        if self.permission_control(request, obj):
+            super().save_model(request, obj, form, change)
+        else:
+            self.message_user(request, level=messages.ERROR, message='PERMISSION DENIED')
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.role == 'SUP' or \
+               request.user.role == 'ADM'
+
+    def has_add_permission(self, request):
+        return request.user.role == 'SUP' or \
+               request.user.role == 'ADM'
+
+    def has_change_permission(self, request, obj=None):
+        return self.permission_control(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        return self.permission_control(request, obj)
+
+    def permission_control(self, request, obj=None):
+        if request.user.role == 'SUP':
+            return True
+        elif request.user.role == 'ADM':
+            if obj is None:
+                return True
+            elif obj and obj.role != 'ADM' and obj.role != 'SUP':
+                return True
+        return False
+
     # Additional actions for admins
     def mark_verified_student(self, request, queryset):
-        queryset.update(role='STU', limit=3, is_verified=True)
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(role='STU', limit=3, is_verified=True)
 
     def mark_verified_teacher(self, request, queryset):
-        queryset.update(role='TEA', limit=5, is_verified=True)
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(role='TEA', limit=5, is_verified=True)
 
     def mark_outdated_user(self, request, queryset):
-        queryset.update(is_active=False, is_verified=False)
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(is_active=False, is_verified=False)
 
 
 admin.site.register(Account, AccountAdmin)

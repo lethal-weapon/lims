@@ -5,7 +5,7 @@ from accounts.models import Account, SCHOOL_CHOICES
 
 class Facility(models.Model):
     name = models.CharField(max_length=100)
-    staff = models.ForeignKey(Account, on_delete=models.DO_NOTHING, blank=True, null=True)
+    staff = models.ForeignKey(Account, blank=True, null=True, on_delete=models.SET_NULL)
     school = models.CharField(max_length=4, choices=SCHOOL_CHOICES, default='TBD')
 
     def __str__(self):

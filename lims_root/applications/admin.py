@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.core.checks import messages
 
+from inventory.models import Apparatus, Laboratory
 from .models import FacilityApplication, ResearchApplication
 
 
@@ -10,8 +12,22 @@ class ApplicationAdmin(admin.ModelAdmin):
     date_hierarchy = 'start'
     list_per_page = 10
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+
+        # each staff only need to handle those applications
+        # they are responsible for, which are defined as changeable
+        ids = set()
+        for app in qs:
+            if self.has_change_permission(request, app):
+                ids.add(app.id)
+
+        return qs.filter(id__in=ids).exclude(status='PEN')
+
     def has_delete_permission(self, request, obj=None):
-        if request.user.role == 'SUP':
+        if request.user.is_superuser:
             return True
         if obj and obj.applicant == request.user:
             return True
@@ -24,33 +40,50 @@ class ApplicationAdmin(admin.ModelAdmin):
             obj.applicant = request.user
         super().save_model(request, obj, form, change)
 
+    def show_action_fail_message(self, request):
+        self.message_user(request, level=messages.ERROR,
+                          message='THE ACTION FAILED ON SOME INSTANCES!')
+
     # Additional actions for workers
     def approve_application(self, request, queryset):
-        queryset.update(status='WAI')
-        queryset.update(reply='Your application has been approved.')
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(status='WAI')
+                queryset.update(reply='Your application has been approved. '
+                                      'Remember to check the schedule in bulletin.')
 
     def decline_application(self, request, queryset):
-        queryset.update(status='CLO')
-        queryset.update(reply='Your application has been declined.')
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(status='CLO')
+                queryset.update(reply='Your application has been declined.')
 
     def miss_facility_schedule(self, request, queryset):
-        queryset.update(status='CLO')
-        queryset.update(reply='You missed the schedule! '
-                              'You have to apply it again if you still want it.')
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(status='CLO')
+                queryset.update(reply='You missed the schedule! '
+                                      'You have to apply it again if you still want it.')
 
     def mark_overtime(self, request, queryset):
-        queryset.update(status='OVE')
-        queryset.update(reply='Your application has exceeded the promised time! '
-                              'FIRST WARNING!')
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(status='OVE')
+                queryset.update(reply='Your application has exceeded the promised time! '
+                                      'FIRST WARNING!')
 
     def mark_facility_taken(self, request, queryset):
-        queryset.update(status='BOR')
-        queryset.update(reply='You has borrowed the facilities successfully. '
-                              'Have fun with that!')
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(status='BOR')
+                queryset.update(reply='You has borrowed the facilities successfully. '
+                                      'Have fun with that!')
 
     def mark_facility_return(self, request, queryset):
-        queryset.update(status='CLO')
-        queryset.update(reply='You has returned the facilities. Thank you!')
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(status='CLO')
+                queryset.update(reply='You has returned the facilities. Thank you!')
 
 
 class FacilityApplicationAdmin(ApplicationAdmin):
@@ -74,9 +107,16 @@ class FacilityApplicationAdmin(ApplicationAdmin):
     )
 
     def items_display(self, obj):
-        return ", ".join([
-            item.name for item in obj.items.all()
-        ])
+        apparatus_ids = [apparatus.id for apparatus in Apparatus.objects.all()]
+        item_names = []
+
+        for item in obj.items.all():
+            if item.id in apparatus_ids:
+                item_names.append(Apparatus.objects.get(id=item.id).__str__())
+            else:
+                item_names.append(Laboratory.objects.get(id=item.id).__str__())
+
+        return ", ".join(item_names)
 
     items_display.short_description = "Items"
 
@@ -115,8 +155,15 @@ class ResearchApplicationAdmin(ApplicationAdmin):
         return False
 
     def approve_application(self, request, queryset):
-        queryset.update(status='ONG')
-        queryset.update(reply='Your research has been approved. Good Luck!')
+        is_success = True
+        for obj in queryset:
+            if self.has_change_permission(request, obj):
+                queryset.update(status='ONG')
+                queryset.update(reply='Your research has been approved. Good Luck!')
+            else:
+                is_success = False
+        if not is_success:
+            self.show_action_fail_message(request)
 
 
 admin.site.register(FacilityApplication, FacilityApplicationAdmin)
